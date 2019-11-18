@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% endblock %}
+</head>
+
+<body>
+<div id="header">
+    {% block header %}
+    <a href="{{ url_for('home_page') }}" id="logo" class="left">Home</a>
+    <a href="{{ url_for('admin_panel') }}" class="right">Admin panel</a>
+    {% endblock %}
+</div>
+<div id="sidebar">
+    {% block sidebar %}
+    <ul>
+        <li><a href="{{ url_for('admin_panel') }}"> Admin panel </a></li>
+        <li><a href="{{ url_for('play_test') }}"> Join a test </a></li>
+    </ul>
+    {% endblock %}
+</div>
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

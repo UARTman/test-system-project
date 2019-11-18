@@ -1,0 +1,47 @@
+#header {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 2px;
+    overflow: auto;
+    float: top;
+}
+
+#sidebar {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 2px;
+    overflow: auto;
+    float: left;
+}
+
+#content {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    margin: 2px;
+    overflow: auto;
+}
+
+#footer {
+    float: bottom;
+}
+
+#header > a#logo{
+    color: crimson;
+}
+
+.right{
+    float: right;
+}
+
+#sidebar > ul {
+    margin: 0;
+    padding: 0;
+}
+
+table{
+    border: solid black 1px;
+
+}
