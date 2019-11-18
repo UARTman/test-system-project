@@ -1,5 +1,7 @@
-from flask import Flask, url_for, request, redirect
+import os
+from flask import Flask, url_for, request, redirect, session
 from flask import render_template
+
 import sqlite3
 
 DATABASE = "example.db"
@@ -7,6 +9,28 @@ TYPES = ["Simple test"]
 
 app = Flask(__name__,
             static_folder="static")
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
+    'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
+
+
+def admin_request(func):
+    def wrapper(*args, **kwargs):
+        if 'user' in session:
+            if session['user'] == 'admin':
+                return func(*args, **kwargs)
+        return redirect("/access_denied")
+    return wrapper
+
+
+@app.route('/access_denied')
+def access_denied():
+    return "<h1>Access Denied!</h1> <a href='/'> Home </a> "
+
+
+@app.route('/test')
+@admin_request
+def test_access():
+    return "Hello!"
 
 
 @app.route('/')
@@ -46,4 +70,3 @@ def play_test():
 
 if __name__ == '__main__':
     app.run()
-    a.close()
