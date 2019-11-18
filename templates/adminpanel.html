@@ -2,16 +2,18 @@
 {% block content %}
 <h3>Admin panel</h3>
 <p> Under development</p>
-<div id="add">
+<div id="add_test" class="right">
     <form  method="post" action="/add_test">
         <label>
             Name:
             <input type="text" name="test_name" required="required" >
         </label>
+        <br>
         <label>
             Type:
             <input type="text" name="test_type" required="required">
         </label>
+        <br>
         <input type="submit" name="sender" value="Add">
 </form>
 </div>

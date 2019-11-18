@@ -15,7 +15,14 @@
 <div id="header">
     {% block header %}
     <a href="{{ url_for('home_page') }}" id="logo" class="left">Home</a>
+    {% if 'user' in session %}
     <a href="{{ url_for('admin_panel') }}" class="right">Admin panel</a>
+    <a href="{{ url_for('logout') }}" class="right"> Logout </a>
+    {% else %}
+    <a href="{{ url_for('login_placeholder') }}" class="right"> Login </a>
+    {% endif %}
+
+
     {% endblock %}
 </div>
 <div id="sidebar">

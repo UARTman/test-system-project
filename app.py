@@ -13,24 +13,34 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
     'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
 
 
-def admin_request(func):
+def restricted(func, users=None):
+    if users is None:
+        users = ['admin']
+
     def wrapper(*args, **kwargs):
         if 'user' in session:
-            if session['user'] == 'admin':
+            if session['user'] in users:
                 return func(*args, **kwargs)
-        return redirect("/access_denied")
+        return redirect(url_for("access_denied"))
+    wrapper.__name__ = func.__name__
     return wrapper
 
 
 @app.route('/access_denied')
 def access_denied():
-    return "<h1>Access Denied!</h1> <a href='/'> Home </a> "
+    return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("home_page"))
 
 
-@app.route('/test')
-@admin_request
-def test_access():
-    return "Hello!"
+@app.route('/login')
+def login_placeholder():
+    session['user'] = 'admin'
+    return redirect(url_for("admin_panel"))
+    
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for("home_page"))
 
 
 @app.route('/')
@@ -54,6 +64,7 @@ def sql_write():
 
 
 @app.route('/admin')
+@restricted
 def admin_panel():
     a = sqlite3.connect("example.db")
     c = a.cursor()
