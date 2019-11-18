@@ -65,7 +65,7 @@ def add_test():
 
 
 @app.route('/remove_test', methods=["GET", "POST"])
-@restricted()
+@restricted
 def remove_test():
     a = sqlite3.connect("example.db")
     c = a.cursor()
