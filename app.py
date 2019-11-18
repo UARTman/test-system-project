@@ -49,7 +49,7 @@ def home_page():
 
 
 @app.route('/add_test', methods=["GET", "POST"])
-def sql_write():
+def add_test():
     a = sqlite3.connect("example.db")
     c = a.cursor()
     c.execute("select * from tests")
@@ -72,6 +72,20 @@ def admin_panel():
     results = c.fetchall()
     a.close()
     return render_template('adminpanel.html', results=results, types=TYPES)
+
+
+@app.route('/admin/test/<ident>')
+@restricted
+def admin_test(ident):
+    a = sqlite3.connect("example.db")
+    c = a.cursor()
+    c.execute('''select id, text_test_questions.question_number, text_test_answers.answer_number, question, answer
+from tests, text_test_answers, text_test_questions
+where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}'''.format(ident))
+    results = c.fetchall()
+    a.close()
+    print(results)
+    return "Placeholder"
 
 
 @app.route('/play')
