@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request
+from flask import Flask, url_for, request, redirect
 from flask import render_template
 import sqlite3
 
@@ -14,19 +14,27 @@ def home_page():
     return render_template('homepage.html', name="Anton")
 
 
-@app.route('/admin', methods=["GET", 'POST'])
+@app.route('/add_test', methods=["GET", "POST"])
+def sql_write():
+    a = sqlite3.connect("example.db")
+    c = a.cursor()
+    c.execute("select * from tests")
+    if request.method == 'POST':
+        print('sender')
+        print('{} {}'.format(request.form['test_name'], request.form['test_type']))
+        c.execute('insert into tests  (name, type) values ("{}",{})'
+                  .format(request.form['test_name'], request.form['test_type']))
+    a.commit()
+    a.close()
+    return redirect("/admin")
+
+
+@app.route('/admin')
 def admin_panel():
     a = sqlite3.connect("example.db")
     c = a.cursor()
     c.execute("select * from tests")
     results = c.fetchall()
-    if request.method == 'POST':
-        print('sender')
-        print('{} {}'.format(request.form['test_name'], request.form['test_type']))
-        c.execute('''insert into tests 
-        (name, type) values
-        ("{}",{})'''.format(request.form['test_name'], request.form['test_type']))
-    a.commit()
     a.close()
     return render_template('adminpanel.html', results=results, types=TYPES)
 
