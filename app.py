@@ -64,6 +64,19 @@ def add_test():
     return redirect("/admin")
 
 
+@app.route('/remove_test', methods=["GET", "POST"])
+@restricted()
+def remove_test():
+    a = sqlite3.connect("example.db")
+    c = a.cursor()
+    if request.method == 'POST':
+        c.execute("delete from tests where id={}".format(request.form['test_id']))
+        print('confirm')
+    a.commit()
+    a.close()
+    return redirect("/admin")
+
+
 @app.route('/admin')
 @restricted
 def admin_panel():

@@ -15,7 +15,15 @@
         </label>
         <br>
         <input type="submit" name="sender" value="Add">
-</form>
+    </form>
+    <form method="post" action="/remove_test">
+        <label>
+            Id:
+            <input type="text" name="test_id" required="required">
+        </label>
+        <br>
+        <input type="submit" name="sender" value="Remove">
+    </form>
 </div>
 <table>
     <tr>
@@ -25,9 +33,9 @@
     </tr>
     {% for i in results %}
     <tr>
-        {% for j in i %}
-        <td>{{ j }}</td>
-        {% endfor %}
+        <td><a href="/admin/test/{{ i[0] }}">{{ i[0] }}</a></td>
+        <td>{{ i[1] }}</td>
+        <td>{{ types[i[2]] }}</td>
     </tr>
     {% endfor %}
 </table>
