@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<ul>
+    {% for i in model %}
+    <li>
+        {{ i[1] }}
+        <ul>
+            {% for j in i[2] %}
+            <li {% if i[3] == j[0] %}
+                    style="color:red"
+                {% endif %}
+            >
+                {{ j[1] }}
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -10,7 +10,7 @@ TYPES = ["Simple test"]
 app = Flask(__name__,
             static_folder="static")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
-    'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
+                           'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
 
 
 def restricted(func, users=None):
@@ -22,6 +22,7 @@ def restricted(func, users=None):
             if session['user'] in users:
                 return func(*args, **kwargs)
         return redirect(url_for("access_denied"))
+
     wrapper.__name__ = func.__name__
     return wrapper
 
@@ -35,7 +36,7 @@ def access_denied():
 def login_placeholder():
     session['user'] = 'admin'
     return redirect(url_for("admin_panel"))
-    
+
 
 @app.route('/logout')
 def logout():
@@ -79,13 +80,24 @@ def admin_panel():
 def admin_test(ident):
     a = sqlite3.connect("example.db")
     c = a.cursor()
-    c.execute('''select id, text_test_questions.question_number, text_test_answers.answer_number, question, answer
+    c.execute(
+        '''select text_test_questions.question_number, text_test_answers.answer_number, correct_answer, question, answer
 from tests, text_test_answers, text_test_questions
-where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}'''.format(ident))
+where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}
+and text_test_answers.question_number = text_test_questions.question_number
+order by text_test_questions.question_number'''.format(ident))
     results = c.fetchall()
     a.close()
     print(results)
-    return "Placeholder"
+    model = []
+    last = None
+    for i in results:
+        if last != i[0]:
+            last = i[0]
+            model.append([i[0], i[3], [], i[2]])
+        model[-1][2].append([i[1], i[4]])
+    print(model)
+    return render_template("admin_text_test.html", model=model)
 
 
 @app.route('/play')
