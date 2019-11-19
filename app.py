@@ -27,6 +27,19 @@ def restricted(func, users=None):
     return wrapper
 
 
+def with_sql(func, db="example.db"):
+    def wrapper(*args, **kwargs):
+        a = sqlite3.connect(db)
+        c = a.cursor()
+        kwargs['cursor'] = c
+        ret = func(*args, **kwargs)
+        a.commit()
+        a.close()
+        return ret
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
 @app.route('/access_denied')
 def access_denied():
     return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("home_page"))
@@ -50,57 +63,47 @@ def home_page():
 
 
 @app.route('/add_test', methods=["GET", "POST"])
-def add_test():
-    a = sqlite3.connect("example.db")
-    c = a.cursor()
-    c.execute("select * from tests")
+@restricted
+@with_sql
+def add_test(cursor=None):
     if request.method == 'POST':
         print('sender')
         print('{} {}'.format(request.form['test_name'], request.form['test_type']))
-        c.execute('insert into tests  (name, type) values ("{}",{})'
-                  .format(request.form['test_name'], request.form['test_type']))
-    a.commit()
-    a.close()
+        cursor.execute('insert into tests  (name, type) values ("{}",{})'
+                       .format(request.form['test_name'], request.form['test_type']))
     return redirect("/admin")
 
 
 @app.route('/remove_test', methods=["GET", "POST"])
 @restricted
-def remove_test():
-    a = sqlite3.connect("example.db")
-    c = a.cursor()
+@with_sql
+def remove_test(cursor=None):
     if request.method == 'POST':
-        c.execute("delete from tests where id={}".format(request.form['test_id']))
+        cursor.execute("delete from tests where id={}".format(request.form['test_id']))
         print('confirm')
-    a.commit()
-    a.close()
     return redirect("/admin")
 
 
 @app.route('/admin')
 @restricted
-def admin_panel():
-    a = sqlite3.connect("example.db")
-    c = a.cursor()
-    c.execute("select * from tests")
-    results = c.fetchall()
-    a.close()
+@with_sql
+def admin_panel(cursor=None):
+    cursor.execute("select * from tests")
+    results = cursor.fetchall()
     return render_template('adminpanel.html', results=results, types=TYPES)
 
 
 @app.route('/admin/test/<ident>')
 @restricted
-def admin_test(ident):
-    a = sqlite3.connect("example.db")
-    c = a.cursor()
-    c.execute(
+@with_sql
+def admin_test(ident, cursor=None):
+    cursor.execute(
         '''select text_test_questions.question_number, text_test_answers.answer_number, correct_answer, question, answer
 from tests, text_test_answers, text_test_questions
 where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}
 and text_test_answers.question_number = text_test_questions.question_number
 order by text_test_questions.question_number'''.format(ident))
-    results = c.fetchall()
-    a.close()
+    results = cursor.fetchall()
     print(results)
     model = []
     last = None
