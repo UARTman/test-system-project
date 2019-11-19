@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<div id="add_test" class="right">
+    <form action="/add_question">
+        <label>Question: <input type="text" name="question"> </label>
+        <input type="submit">
+    </form>
+</div>
 <ul>
     {% for i in model %}
     <li>

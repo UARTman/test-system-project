@@ -79,7 +79,12 @@ def add_test(cursor=None):
 @with_sql
 def remove_test(cursor=None):
     if request.method == 'POST':
-        cursor.execute("delete from tests where id={}".format(request.form['test_id']))
+        cursor.execute("delete from tests where id={}"
+                       .format(request.form['test_id']))
+        cursor.execute("delete from text_test_questions where test_id={}"
+                       .format(request.form['test_id']))
+        cursor.execute("delete from text_test_answers where test_id={}"
+                       .format(request.form['test_id']))
         print('confirm')
     return redirect("/admin")
 
@@ -104,7 +109,6 @@ where text_test_questions.test_id = id and text_test_answers.test_id = id and id
 and text_test_answers.question_number = text_test_questions.question_number
 order by text_test_questions.question_number'''.format(ident))
     results = cursor.fetchall()
-    print(results)
     model = []
     last = None
     for i in results:
@@ -112,7 +116,6 @@ order by text_test_questions.question_number'''.format(ident))
             last = i[0]
             model.append([i[0], i[3], [], i[2]])
         model[-1][2].append([i[1], i[4]])
-    print(model)
     return render_template("admin_text_test.html", model=model)
 
 
