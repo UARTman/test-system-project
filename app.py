@@ -22,7 +22,6 @@ def restricted(func, users=None):
             if session['user'] in users:
                 return func(*args, **kwargs)
         return redirect(url_for("access_denied"))
-
     wrapper.__name__ = func.__name__
     return wrapper
 
@@ -120,8 +119,17 @@ order by text_test_questions.question_number'''.format(ident))
 
 
 @app.route('/play')
-def play_test():
-    return render_template('test.html')
+@with_sql
+def play_test(cursor=None):
+    cursor.execute("select * from tests")
+    results = cursor.fetchall()
+    return render_template('tests_page.html', results=results, types=TYPES)
+
+
+@app.route('/play/<ident>')
+@with_sql
+def take_test(ident, cursor=None):
+    return ""
 
 
 if __name__ == '__main__':
