@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="left">
+    <form method="post" action="{{ id }}/evaluate">
+        {% for i in model %}
+        <label>
+            {{ i[1] }}
+            <select name="q{{ i[0] }}">
+                {% for j in i[2] %}
+                <option name="a{{ j[0] }}" value="{{ j[0] }}">{{ j[1] }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+        {% endfor %}
+        <label>Your name:
+            <input type="text" name="name" required>
+        </label><br>
+        <input type="submit" value="Send">
+    </form>
+</div>
+{% endblock %}

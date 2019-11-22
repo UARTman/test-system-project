@@ -6,6 +6,11 @@ import sqlite3
 
 DATABASE = "example.db"
 TYPES = ["Simple test"]
+TEST_MODEL_SQL = '''select text_test_questions.question_number, text_test_answers.answer_number, correct_answer, question, answer
+from tests, text_test_answers, text_test_questions
+where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}
+and text_test_answers.question_number = text_test_questions.question_number
+order by text_test_questions.question_number'''
 
 app = Flask(__name__,
             static_folder="static")
@@ -101,12 +106,7 @@ def admin_panel(cursor=None):
 @restricted
 @with_sql
 def admin_test(ident, cursor=None):
-    cursor.execute(
-        '''select text_test_questions.question_number, text_test_answers.answer_number, correct_answer, question, answer
-from tests, text_test_answers, text_test_questions
-where text_test_questions.test_id = id and text_test_answers.test_id = id and id = {}
-and text_test_answers.question_number = text_test_questions.question_number
-order by text_test_questions.question_number'''.format(ident))
+    cursor.execute(TEST_MODEL_SQL.format(ident))
     results = cursor.fetchall()
     model = []
     last = None
@@ -129,6 +129,34 @@ def play_test(cursor=None):
 @app.route('/play/<ident>')
 @with_sql
 def take_test(ident, cursor=None):
+    cursor.execute(TEST_MODEL_SQL.format(ident))
+    results = cursor.fetchall()
+    model = []
+    last = None
+    for i in results:
+        if last != i[0]:
+            last = i[0]
+            model.append([i[0], i[3], [], i[2]])
+        model[-1][2].append([i[1], i[4]])
+    return render_template("test_participate_text.html", model=model, id=ident)
+
+
+@app.route('/play/<ident>/evaluate', methods=["GET", "POST"])
+@with_sql
+def eval_test(ident, cursor=None):
+    cursor.execute(TEST_MODEL_SQL.format(ident))
+    results = cursor.fetchall()
+    model = []
+    last = None
+    for i in results:
+        if last != i[0]:
+            last = i[0]
+            model.append([i[0], i[3], [], i[2]])
+        model[-1][2].append([i[1], i[4]])
+    l = len(request.form) - 1
+    print(request.form)
+    print(l)
+
     return ""
 
 
