@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="left">
+    <ul>
+        {% for i in model %}
+        <li>
+            {{ i[1] }} <br>
+            Your answer: {{ i[2] }} <br>
+            Correct answer: {{ i[3] }} <hr>
+        </li>
+        {% endfor %}
+    </ul>
+    Correct answers: {{ correct }}/{{ length }}
+
+</div>
+{% endblock %}

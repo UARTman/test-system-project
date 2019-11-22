@@ -168,8 +168,8 @@ def eval_test(ident, cursor=None):
         if k == ll:
             c += 1
         model1.append([i[0], i[1], ll, k])
-    print(model1, c, l-1)
-    return ""
+    print(model1, c, l)
+    return render_template("test_evaluate_text.html", model=model1, correct=c, length=l)
 
 
 if __name__ == '__main__':
