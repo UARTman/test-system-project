@@ -155,8 +155,20 @@ def eval_test(ident, cursor=None):
         model[-1][2].append([i[1], i[4]])
     l = len(request.form) - 1
     print(request.form)
+    print(model)
     print(l)
-
+    model1 = []
+    c = 0
+    for i in model:
+        for j in i[2]:
+            if j[0] == i[-1]:
+                k = j[1]
+            if j[0] == int(request.form["q{}".format(i[0])]):
+                ll = j[1]
+        if k == ll:
+            c += 1
+        model1.append([i[0], i[1], ll, k])
+    print(model1, c, l-1)
     return ""
 
 
