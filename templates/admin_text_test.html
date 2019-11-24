@@ -24,14 +24,14 @@
 <ul>
     {% for i in model %}
     <li>
-        {{ i[1] }}
+        {{ i.content }}
         <ul>
-            {% for j in i[2] %}
-            <li {% if i[3] == j[0] %}
+            {% for j in i.answers %}
+            <li {% if i.correct_answer == j.number %}
                     style="color:red"
                 {% endif %}
             >
-                {{ j[1] }}
+                {{ j.content }}
             </li>
             {% endfor %}
         </ul>

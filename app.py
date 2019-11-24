@@ -1,6 +1,7 @@
 import os
 from flask import Flask, url_for, request, redirect, session
 from flask import render_template
+from orm import *
 
 import sqlite3
 
@@ -18,6 +19,17 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
                            'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
 
 
+@app.before_request
+def before_request():
+    db.connect()
+
+
+@app.after_request
+def after_request(response):
+    db.close()
+    return response
+
+
 def restricted(func, users=None):
     if users is None:
         users = ['admin']
@@ -27,6 +39,7 @@ def restricted(func, users=None):
             if session['user'] in users:
                 return func(*args, **kwargs)
         return redirect(url_for("access_denied"))
+
     wrapper.__name__ = func.__name__
     return wrapper
 
@@ -40,6 +53,7 @@ def with_sql(func, db="example.db"):
         a.commit()
         a.close()
         return ret
+
     wrapper.__name__ = func.__name__
     return wrapper
 
@@ -68,17 +82,14 @@ def home_page():
 
 @app.route('/add_test', methods=["GET", "POST"])
 @restricted
-@with_sql
-def add_test(cursor=None):
+def add_test():
     if request.method == 'POST':
-        print('sender')
-        print('{} {}'.format(request.form['test_name'], request.form['test_type']))
-        cursor.execute('insert into tests  (name, type) values ("{}",{})'
-                       .format(request.form['test_name'], request.form['test_type']))
+        with db.atomic():
+            Test.create(name=request.form['test_name'], type=request.form['test_type'])
     return redirect("/admin")
 
 
-@app.route('/remove_test', methods=["GET", "POST"])
+@app.route('/remove_test', methods=["GET", "POST"])  # TODO: orm-ify remove_test
 @restricted
 @with_sql
 def remove_test(cursor=None):
@@ -95,30 +106,21 @@ def remove_test(cursor=None):
 
 @app.route('/admin')
 @restricted
-@with_sql
-def admin_panel(cursor=None):
-    cursor.execute("select * from tests")
-    results = cursor.fetchall()
+def admin_panel():
+    with db.atomic():
+        results = Test.select()
     return render_template('adminpanel.html', results=results, types=TYPES)
 
 
-@app.route('/admin/test/<ident>')
+@app.route('/admin/test/<int:ident>')
 @restricted
-@with_sql
-def admin_test(ident, cursor=None):
-    cursor.execute(TEST_MODEL_SQL.format(ident))
-    results = cursor.fetchall()
-    model = []
-    last = None
-    for i in results:
-        if last != i[0]:
-            last = i[0]
-            model.append([i[0], i[3], [], i[2]])
-        model[-1][2].append([i[1], i[4]])
-    return render_template("admin_text_test.html", model=model)
+def admin_test(ident):
+    with db.atomic():
+        questions = Test.get(id=ident).questions
+    return render_template("admin_text_test.html", model=questions)
 
 
-@app.route('/play')
+@app.route('/play')  # TODO: orm-ify play_test
 @with_sql
 def play_test(cursor=None):
     cursor.execute("select * from tests")
@@ -126,7 +128,7 @@ def play_test(cursor=None):
     return render_template('tests_page.html', results=results, types=TYPES)
 
 
-@app.route('/play/<ident>')
+@app.route('/play/<ident>')  # TODO: orm-ify take_test
 @with_sql
 def take_test(ident, cursor=None):
     cursor.execute(TEST_MODEL_SQL.format(ident))
@@ -141,7 +143,7 @@ def take_test(ident, cursor=None):
     return render_template("test_participate_text.html", model=model, id=ident)
 
 
-@app.route('/play/<ident>/evaluate', methods=["GET", "POST"])
+@app.route('/play/<ident>/evaluate', methods=["GET", "POST"])  # TODO: orm-ify eval_test
 @with_sql
 def eval_test(ident, cursor=None):
     cursor.execute(TEST_MODEL_SQL.format(ident))
