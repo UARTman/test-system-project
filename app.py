@@ -89,7 +89,7 @@ def admin_panel():
 @restricted
 def admin_test(ident):
     with db.atomic():
-        questions = Test.get(id=ident).questions
+        questions = Test.get_by_id(ident).questions
     return render_template("admin_text_test.html", model=questions)
 
 
@@ -121,13 +121,15 @@ def eval_test(ident):
             .select(TextQuestion, Correct.content)\
             .join(Correct, attr="correct")\
             .where(Correct.number == TextQuestion.correct_answer)
+
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
     for i in answers:
         answers[i] = TextQuestion.get_by_id(i).answers\
             .where(TextAnswer.number == answers[i])[0].content
-    Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
+    with db.atomic:
+        Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c, length=len(questions))
 
 
