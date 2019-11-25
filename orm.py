@@ -26,5 +26,11 @@ class TextAnswer(BaseModel):
     question = ForeignKeyField(TextQuestion, backref="answers")
 
 
+class Record(BaseModel):
+    name = TextField()
+    score = IntegerField()
+    test = ForeignKeyField(Test)
+
+
 if __name__ == '__main__':
-    db.create_tables([Test, TextQuestion, TextAnswer])
+    db.create_tables([Test, TextQuestion, TextAnswer, Record])

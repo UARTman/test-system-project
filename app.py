@@ -127,6 +127,7 @@ def eval_test(ident):
     for i in answers:
         answers[i] = TextQuestion.get_by_id(i).answers\
             .where(TextAnswer.number == answers[i])[0].content
+    Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c, length=len(questions))
 
 
