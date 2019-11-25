@@ -3,8 +3,6 @@ from flask import Flask, url_for, request, redirect, session
 from flask import render_template
 from orm import *
 
-import sqlite3
-
 TYPES = ["Simple test"]
 
 app = Flask(__name__,
