@@ -5,8 +5,8 @@
         {% for i in model %}
         <li>
             {{ i.content }} <br>
-            Your answer: {{ i.answers[answers[i.number] - 1].content }} <br>
-            Correct answer: {{ i.answers[i.correct_answer - 1].content }} <hr>
+            Your answer: {{ answers[i.number] }} <br>
+            Correct answer: {{ i.correct.content }} <hr>
         </li>
         {% endfor %}
     </ul>

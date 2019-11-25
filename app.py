@@ -116,11 +116,17 @@ def eval_test(ident):
     c = 0
 
     with db.atomic():
-        questions = Test.get_by_id(ident).questions
+        Correct = TextAnswer.alias()
+        questions = Test.get_by_id(ident).questions\
+            .select(TextQuestion, Correct.content)\
+            .join(Correct, attr="correct")\
+            .where(Correct.number == TextQuestion.correct_answer)
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
-    print(answers, c)
+    for i in answers:
+        answers[i] = TextQuestion.get_by_id(i).answers\
+            .where(TextAnswer.number == answers[i])[0].content
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c, length=len(questions))
 
 
