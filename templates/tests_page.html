@@ -8,9 +8,9 @@
     </tr>
     {% for i in results %}
     <tr>
-        <td><a href="/play/{{ i[0] }}">{{ i[0] }}</a></td>
-        <td>{{ i[1] }}</td>
-        <td>{{ types[i[2]] }}</td>
+        <td><a href="/play/{{ i.id }}">{{ i.id }}</a></td>
+        <td>{{ i.id }}</td>
+        <td>{{ types[i.type] }}</td>
     </tr>
     {% endfor %}
 </table>
