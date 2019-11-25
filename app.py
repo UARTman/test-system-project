@@ -90,7 +90,7 @@ def admin_panel():
 def admin_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions
-    return render_template("admin_text_test.html", model=questions)
+    return render_template("admin_text_test.html", model=questions, id=ident)
 
 
 @app.route('/play')
@@ -131,6 +131,25 @@ def eval_test(ident):
     with db.atomic:
         Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c, length=len(questions))
+
+
+@app.route('/admin/test/<int:ident>/add_question', methods=["POST"])
+def add_question(ident):
+    test = Test.get_by_id(ident)
+    number = len(test.questions) + 1
+    with db.atomic():
+        TextQuestion.create(number=number, correct_answer=0, content=request.form["question"], test=test)
+    return redirect("/admin/test/{}".format(ident))
+
+
+@app.route('/admin/test/<int:ident>/rm_question', methods=["POST"])
+def rm_question(ident):
+    with db.atomic():
+        test = Test.get_by_id(ident)
+        for i in test.questions.select().where(TextQuestion.number == int(request.form["number"])):
+            print(i.id)
+            TextQuestion.get_by_id(i.id).delete_instance(recursive=True)
+    return redirect("/admin/test/{}".format(ident))
 
 
 if __name__ == '__main__':

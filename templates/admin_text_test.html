@@ -1,23 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="add_test" class="right">
-    <form action="/add_question" method="post">
+    <form action="{{ id }}/add_question" method="post">
         <label>Question: <input type="text" name="question" required> </label>
         <input type="submit" value="Add">
     </form>
-</div>
-<div id="add_test" class="right">
-    <form action="/add_answer" method="post">
-        <label>Question number: <input type="text" name="question" required></label><br>
-        <label>Answer: <input type="text" name="answer" required></label><br>
-        <input type="submit" value="Add">
-    </form>
-</div>
-<div id="add_test" class="right">
-    <form>
-        <label>Question number: <input type="text" name="question" required></label><br>
-        <label>Correct answer number: <input type="text" name="correct" required></label>
-        <input type="submit" value="Set">
+    <form action="{{ id }}/rm_question" method="post">
+        <label>Question number: <input type="test" name="number" required> </label>
+        <input type="submit" value="Remove">
     </form>
 </div>
 <div class="left">
