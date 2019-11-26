@@ -6,22 +6,42 @@
         <input type="submit" value="Add">
     </form>
     <form action="{{ id }}/rm_question" method="post">
-        <label>Question number: <input type="test" name="number" required> </label>
+        <label>Question number: <input type="text" name="number" required> </label>
         <input type="submit" value="Remove">
+    </form>
+    <hr>
+    <form action="{{ id }}/add_answer" method="post">
+        <label>Question number: <input type="text" name="question" required></label>
+        <br>
+        <label>Answer: <input type="text" name="content" required></label>
+        <input type="submit" value="Add answer">
+    </form>
+    <form action="{{ id }}/rm_answer" method="post">
+        <label>Question number: <input type="text" name="question" required></label>
+        <br>
+        <label>Answer number: <input type="text" name="number" required></label>
+        <input type="submit" value="Remove answer">
+    </form>
+    <hr>
+    <form action="{{ id }}/ch_correct" method="post">
+        <label>Question number: <input type="text" name="question" required></label>
+        <br>
+        <label>Correct answer: <input type="text" name="correct" required></label>
+        <input type="submit" value="Set correct answer">
     </form>
 </div>
 <div class="left">
 <ul>
     {% for i in model %}
     <li>
-        {{ i.content }}
+        {{ i.number }} : {{ i.content }}
         <ul>
             {% for j in i.answers %}
             <li {% if i.correct_answer == j.number %}
                     style="color:red"
                 {% endif %}
             >
-                {{ j.content }}
+                {{ j.number }} : {{ j.content }}
             </li>
             {% endfor %}
         </ul>
