@@ -3,8 +3,7 @@ from flask import Flask, url_for, request, redirect, session
 from flask import render_template
 from orm import *
 
-TYPES = ["Simple test"]
-
+TYPES = {0: "Simple test"}
 app = Flask(__name__,
             static_folder="static")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
@@ -115,20 +114,21 @@ def eval_test(ident):
 
     with db.atomic():
         Correct = TextAnswer.alias()
-        questions = Test.get_by_id(ident).questions\
-            .select(TextQuestion, Correct.content)\
-            .join(Correct, attr="correct")\
+        questions = Test.get_by_id(ident).questions \
+            .select(TextQuestion, Correct.content) \
+            .join(Correct, attr="correct") \
             .where(Correct.number == TextQuestion.correct_answer)
 
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
     for i in answers:
-        answers[i] = TextQuestion.get_by_id(i).answers\
+        answers[i] = TextQuestion.get_by_id(i).answers \
             .where(TextAnswer.number == answers[i])[0].content
     with db.atomic():
         Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
-    return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c, length=len(questions))
+    return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c,
+                           length=len(questions))
 
 
 @app.route('/admin/test/<int:ident>/add_question', methods=["POST"])
@@ -147,16 +147,18 @@ def rm_question(ident):
         for i in test.questions.select().where(TextQuestion.number == int(request.form["number"])):
             print(i.number)
             TextQuestion.get_by_id(i.id).delete_instance(recursive=True)
-        TextQuestion.update(number=TextQuestion.number - 1)\
-            .where(TextQuestion.number > request.form["number"] and TextQuestion.test == test).execute()
+        TextQuestion.update(number=TextQuestion.number - 1) \
+            .where(TextQuestion.number > request.form["number"]) \
+            .where(TextQuestion.test == test).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/admin/test/<int:ident>/add_answer", methods=["post"])
 def add_answer(ident):
     with db.atomic():
-        question = Test.get_by_id(ident).questions.select().where(TextQuestion.number == int(request.form["question"]))[0]
-        TextAnswer.create(number=len(question.answers)+1, content=request.form["content"], question=question)
+        question = Test.get_by_id(ident).questions.select().where(TextQuestion.number == int(request.form["question"]))[
+            0]
+        TextAnswer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
     return redirect("/admin/test/{}".format(ident))
 
 
@@ -168,8 +170,8 @@ def rm_answer(ident):
         TextAnswer.delete_by_id(answers[0].id)
         for i in answers.where(TextAnswer.number > int(request.form["number"])):
             print(i.number, int(request.form["number"]))
-        TextAnswer.update(number=TextAnswer.number - 1)\
-            .where(TextAnswer.number > int(request.form["number"]))\
+        TextAnswer.update(number=TextAnswer.number - 1) \
+            .where(TextAnswer.number > int(request.form["number"])) \
             .where(TextAnswer.question == question).execute()
     return redirect("/admin/test/{}".format(ident))
 

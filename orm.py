@@ -1,6 +1,6 @@
 from peewee import *
 
-db = SqliteDatabase('ormdb.db')
+db = SqliteDatabase('orm.db')
 
 
 class BaseModel(Model):
@@ -29,7 +29,7 @@ class TextAnswer(BaseModel):
 class Record(BaseModel):
     name = TextField()
     score = IntegerField()
-    test = ForeignKeyField(Test)
+    test = ForeignKeyField(Test, backref="done")
 
 
 if __name__ == '__main__':

@@ -9,18 +9,14 @@
         <br>
         <label>
             Type:
-            <input type="text" name="test_type" required="required">
+            <select name="test_type" required>
+                {% for i in types %}
+                <option value="{{ i }}">{{ types[i] }}</option>
+                {% endfor %}
+            </select>
         </label>
         <br>
         <input type="submit" name="sender" value="Add">
-    </form>
-    <form method="post" action="/remove_test">
-        <label>
-            Id:
-            <input type="text" name="test_id" required="required">
-        </label>
-        <br>
-        <input type="submit" name="sender" value="Remove">
     </form>
 </div>
 <table>
@@ -34,7 +30,16 @@
         <td><a href="/admin/test/{{ i.id }}">{{ i.id }}</a></td>
         <td>{{ i.name }}</td>
         <td>{{ types[i.type] }}</td>
+        <td class="remove_button" style="color: red"> x </td>
     </tr>
     {% endfor %}
 </table>
+<script>
+    $(function(){
+        $( ".remove_button" ).click(function () {
+            let a = $(this).prev().prev().prev().text();
+            $.post("/remove_test", {test_id: a}, function() {location.reload()})
+        })
+    })
+</script>
 {% endblock %}
