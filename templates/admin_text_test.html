@@ -5,10 +5,6 @@
         <label>Question: <input type="text" name="question" required> </label>
         <input type="submit" value="Add">
     </form>
-    <form action="{{ id }}/rm_question" method="post">
-        <label>Question number: <input type="text" name="number" required> </label>
-        <input type="submit" value="Remove">
-    </form>
     <hr>
     <form action="{{ id }}/add_answer" method="post">
         <label>Question number: <input type="text" name="question" required></label>
@@ -16,25 +12,13 @@
         <label>Answer: <input type="text" name="content" required></label>
         <input type="submit" value="Add answer">
     </form>
-    <form action="{{ id }}/rm_answer" method="post">
-        <label>Question number: <input type="text" name="question" required></label>
-        <br>
-        <label>Answer number: <input type="text" name="number" required></label>
-        <input type="submit" value="Remove answer">
-    </form>
     <hr>
-    <form action="{{ id }}/ch_correct" method="post">
-        <label>Question number: <input type="text" name="question" required></label>
-        <br>
-        <label>Correct answer: <input type="text" name="correct" required></label>
-        <input type="submit" value="Set correct answer">
-    </form>
 </div>
 <div class="left">
 <ul>
     {% for i in model %}
     <li>
-        {{ i.number }} : {{ i.content }}
+        {{ i.number }} : {{ i.content }} <span class="remove_question" style="color: red;">[x]</span>
         <ul>
             {% for j in i.answers %}
             <li {% if i.correct_answer == j.number %}
@@ -42,6 +26,8 @@
                 {% endif %}
             >
                 {{ j.number }} : {{ j.content }}
+                <span class="remove_answer" style="color: red;">[x]</span>
+                <span class="correct_answer" style="color: green;">[✔️]</span>
             </li>
             {% endfor %}
         </ul>
@@ -49,4 +35,27 @@
     {% endfor %}
 </ul>
 </div>
+<script>
+    $(function () {
+        $( ".remove_answer" ).click(function () {
+            let a = $(this).parent().text().split(':')[0];
+            a = parseInt(a, 10);
+            let b = $(this).parent().parent().parent().text().split(":")[0];
+            b = parseInt(b, 10);
+            $.post("{{ id }}/rm_answer", {question: b, number: a}, function () {location.reload();})
+        });
+        $( ".remove_question" ).click(function () {
+            let a = $(this).parent().text().split(':')[0];
+            a = parseInt(a);
+            $.post("{{ id }}/rm_question", {number: a}, function () {location.reload();})
+        });
+        $( ".correct_answer" ).click(function () {
+            let a = $(this).parent().text().split(':')[0];
+            a = parseInt(a, 10);
+            let b = $(this).parent().parent().parent().text().split(":")[0];
+            b = parseInt(b, 10);
+            $.post("{{ id }}/ch_correct", {question: b, correct: a}, function () {location.reload();})
+        });
+    })
+</script>
 {% endblock %}
