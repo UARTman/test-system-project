@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<table>
+    <tr>
+        <th> Name </th>
+        <th> Test </th>
+        <th> Score </th>
+    </tr>
+    {% for i in model %}
+    <tr>
+        <td>{{ i.name }}</td>
+        <td>{{ i.test.name }}</td>
+        <td>{{ i.score }} / {{ len(i.test.questions) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

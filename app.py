@@ -111,6 +111,7 @@ def eval_test(ident):
         if i[0] == 'q':
             answers[int(i[1:])] = int(request.form[i])
     c = 0
+    print(answers)
 
     with db.atomic():
         Correct = TextAnswer.alias()
@@ -118,13 +119,16 @@ def eval_test(ident):
             .select(TextQuestion, Correct.content) \
             .join(Correct, attr="correct") \
             .where(Correct.number == TextQuestion.correct_answer)
+    print("1")
 
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
+    print("1")
     for i in answers:
-        answers[i] = TextQuestion.get_by_id(i).answers \
+        answers[i] = questions.where(TextQuestion.number == i)[0].answers \
             .where(TextAnswer.number == answers[i])[0].content
+    print(answers)
     with db.atomic():
         Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c,
@@ -182,6 +186,13 @@ def ch_correct(ident):
         question = Test.get_by_id(ident).questions.where(TextQuestion.number == request.form["question"])[0]
         question.update(correct_answer=request.form["correct"]).where(TextQuestion.id == question.id).execute()
     return redirect("/admin/test/{}".format(ident))
+
+
+@app.route("/leaderboard")
+def leaderboard():
+    with db.atomic():
+        model = Record.select()
+    return render_template("leaderboard.html", model=model, len=len)
 
 
 if __name__ == '__main__':

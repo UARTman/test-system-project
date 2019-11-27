@@ -16,7 +16,6 @@
         <label>Answer: <input type="text" name="content" required></label>
         <input type="submit" value="Add answer">
     </form>
-    <hr>
 </div>
 <div class="left">
 <ul>
@@ -25,10 +24,7 @@
         {{ i.number }} : {{ i.content }} <span class="remove_question" style="color: red;">[x]</span>
         <ul>
             {% for j in i.answers %}
-            <li {% if i.correct_answer == j.number %}
-                    style="color:green"
-                {% endif %}
-            >
+            <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
                 {{ j.number }} : {{ j.content }}
                 <span class="remove_answer" style="color: red;">[x]</span>
                 <span class="correct_answer" style="color: green;">[✔️]</span>
@@ -60,7 +56,6 @@
             b = parseInt(b, 10);
             $.post("{{ id }}/ch_correct", {question: b, correct: a}, function () {location.reload();})
         });
-        $( ".selector" ).selectmenu()
     })
 </script>
 {% endblock %}
