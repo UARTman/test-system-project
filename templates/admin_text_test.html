@@ -7,7 +7,11 @@
     </form>
     <hr>
     <form action="{{ id }}/add_answer" method="post">
-        <label>Question number: <input type="text" name="question" required></label>
+        <label>Question : <select name="question" class="selector" required>
+            {% for i in model %}
+            <option value="{{ i.number }}">{{ i.content }}</option>
+            {% endfor %}
+        </select>
         <br>
         <label>Answer: <input type="text" name="content" required></label>
         <input type="submit" value="Add answer">
@@ -22,7 +26,7 @@
         <ul>
             {% for j in i.answers %}
             <li {% if i.correct_answer == j.number %}
-                    style="color:red"
+                    style="color:green"
                 {% endif %}
             >
                 {{ j.number }} : {{ j.content }}
@@ -56,6 +60,7 @@
             b = parseInt(b, 10);
             $.post("{{ id }}/ch_correct", {question: b, correct: a}, function () {location.reload();})
         });
+        $( ".selector" ).selectmenu()
     })
 </script>
 {% endblock %}
