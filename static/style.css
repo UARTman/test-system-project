@@ -1,3 +1,7 @@
+* {
+    font-size: large;
+}
+
 #header {
     border-style: solid;
     border-width: 1px;
