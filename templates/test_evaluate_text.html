@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="left">
-    <ul>
-        {% for i in model %}
-        <li>
-            {{ i.content }} <br>
-            Your answer: {{ answers[i.number] }} <br>
-            Correct answer: {{ i.correct.content }} <hr>
-        </li>
-        {% endfor %}
-    </ul>
-    Correct answers: {{ correct }}/{{ length }}
-
-</div>
+    <div class="left">
+        <ul>
+            {% for i in model %}
+                <li>
+                    {{ i.content }} <br>
+                    Your answer: {{ answers[i.number] }} <br>
+                    Correct answer: {{ i.correct.content }} <hr>
+                </li>
+            {% endfor %}
+        </ul>
+        Correct answers: {{ correct }}/{{ length }}
+    </div>
 {% endblock %}

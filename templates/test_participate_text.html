@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="left">
-    <form method="post" action="{{ id }}/evaluate">
-        {% for i in model %}
-        <label>
-            {{ i.content }}
-            <select name="q{{ i.number }}">
-                {% for j in i.answers %}
-                <option name="a{{ j.number }}" value="{{ j.number }}">{{ j.content }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <br>
-        {% endfor %}
-        <hr>
-        <label>Your name:
-            <input type="text" name="name" required>
-        </label><br>
-        <input type="submit" value="Send">
-    </form>
-</div>
+    <div class="left">
+        <form method="post" action="{{ id }}/evaluate">
+            {% for i in model %}
+                <label>
+                    {{ i.content }}
+                    <select name="q{{ i.number }}">
+                        {% for j in i.answers %}
+                            <option name="a{{ j.number }}" value="{{ j.number }}">{{ j.content }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <br>
+            {% endfor %}
+            <hr>
+            <label>Your name:
+                <input type="text" name="name" required>
+            </label><br>
+            <input type="submit" value="Send">
+        </form>
+    </div>
 {% endblock %}

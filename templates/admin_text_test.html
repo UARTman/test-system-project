@@ -1,61 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="add_test" class="right">
-    <form action="{{ id }}/add_question" method="post">
-        <label>Question: <input type="text" name="question" required> </label>
-        <input type="submit" value="Add">
-    </form>
-    <hr>
-    <form action="{{ id }}/add_answer" method="post">
-        <label>Question : <select name="question" class="selector" required>
-            {% for i in model %}
-            <option value="{{ i.number }}">{{ i.content }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label>Answer: <input type="text" name="content" required></label>
-        <input type="submit" value="Add answer">
-    </form>
-</div>
-<div class="left">
-<ul>
-    {% for i in model %}
-    <li>
-        {{ i.number }} : {{ i.content }} <span class="remove_question" style="color: red;">[x]</span>
-        <ul>
-            {% for j in i.answers %}
-            <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
-                {{ j.number }} : {{ j.content }}
-                <span class="remove_answer" style="color: red;">[x]</span>
-                <span class="correct_answer" style="color: green;">[✔️]</span>
+    <div id="add_test" class="right">
+        <form action="{{ id }}/add_question" method="post">
+            <label>Question: <input type="text" name="question" required> </label>
+            <input type="submit" value="Add">
+        </form>
+        <hr>
+        <form action="{{ id }}/add_answer" method="post">
+            <label>Question : <select name="question" class="selector" required>
+                {% for i in model %}
+                    <option value="{{ i.number }}">{{ i.content }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label>Answer: <input type="text" name="content" required></label>
+            <input type="submit" value="Add answer">
+        </form>
+    </div>
+    <div class="left">
+    <ul>
+        {% for i in model %}
+            <li>
+                {{ i.number }} : {{ i.content }} <span class="remove_question" style="color: red;">[x]</span>
+                <ul>
+                    {% for j in i.answers %}
+                        <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
+                            {{ j.number }} : {{ j.content }}
+                            <span class="remove_answer" style="color: red;">[x]</span>
+                            <span class="correct_answer" style="color: green;">[✔️]</span>
+                        </li>
+                    {% endfor %}
+                </ul>
             </li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endfor %}
-</ul>
-</div>
-<script>
-    $(function () {
-        $( ".remove_answer" ).click(function () {
-            let a = $(this).parent().text().split(':')[0];
-            a = parseInt(a, 10);
-            let b = $(this).parent().parent().parent().text().split(":")[0];
-            b = parseInt(b, 10);
-            $.post("{{ id }}/rm_answer", {question: b, number: a}, function () {location.reload();})
-        });
-        $( ".remove_question" ).click(function () {
-            let a = $(this).parent().text().split(':')[0];
-            a = parseInt(a);
-            $.post("{{ id }}/rm_question", {number: a}, function () {location.reload();})
-        });
-        $( ".correct_answer" ).click(function () {
-            let a = $(this).parent().text().split(':')[0];
-            a = parseInt(a, 10);
-            let b = $(this).parent().parent().parent().text().split(":")[0];
-            b = parseInt(b, 10);
-            $.post("{{ id }}/ch_correct", {question: b, correct: a}, function () {location.reload();})
-        });
-    })
-</script>
+        {% endfor %}
+    </ul>
+    </div>
+    <script>
+        $(function () {
+            $( ".remove_answer" ).click(function () {
+                let a = $(this).parent().text().split(':')[0];
+                a = parseInt(a, 10);
+                let b = $(this).parent().parent().parent().text().split(":")[0];
+                b = parseInt(b, 10);
+                $.post("{{ id }}/rm_answer", {question: b, number: a}, function () {location.reload();})
+            });
+            $( ".remove_question" ).click(function () {
+                let a = $(this).parent().text().split(':')[0];
+                a = parseInt(a);
+                $.post("{{ id }}/rm_question", {number: a}, function () {location.reload();})
+            });
+            $( ".correct_answer" ).click(function () {
+                let a = $(this).parent().text().split(':')[0];
+                a = parseInt(a, 10);
+                let b = $(this).parent().parent().parent().text().split(":")[0];
+                b = parseInt(b, 10);
+                $.post("{{ id }}/ch_correct", {question: b, correct: a}, function () {location.reload();})
+            });
+        })
+    </script>
 {% endblock %}
