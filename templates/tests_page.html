@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "template_base.html" %}
 {% block content %}
     <table>
         <tr>
@@ -8,7 +8,7 @@
         </tr>
         {% for i in results %}
             <tr>
-                <td><a href="{{ url_for('take_test', ident=i.id) }}">{{ i.id }}</a></td>
+                <td><a href="{{ url_for('page_list_test', ident=i.id) }}">{{ i.id }}</a></td>
                 <td>{{ i.name }}</td>
                 <td>{{ types[i.type] }}</td>
             </tr>

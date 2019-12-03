@@ -17,20 +17,20 @@
 <body>
 <div id="header">
     {% block header %}
-        <a href="{{ url_for('home_page') }}" id="logo" class="left">Home</a>
+        <a href="{{ url_for('page_home') }}" id="logo" class="left">Home</a>
         {% if 'user' in session %}
-            <a href="{{ url_for('admin_panel') }}">Admin panel</a>
-            <a href="{{ url_for('logout') }}"> Logout </a>
+            <a href="{{ url_for('page_admin_tests') }}">Admin panel</a>
+            <a href="{{ url_for('action_logout') }}"> Logout </a>
         {% else %}
-            <a href="{{ url_for('login_placeholder') }}"> Login </a>
+            <a href="{{ url_for('action_login') }}"> Login </a>
         {% endif %}
     {% endblock %}
 </div>
 <div id="sidebar">
     {% block sidebar %}
         <ul>
-            <li><a href="{{ url_for('admin_panel') }}"> Admin panel </a></li>
-            <li><a href="{{ url_for('play_test') }}"> Join a test </a></li>
+            <li><a href="{{ url_for('page_admin_tests') }}"> Admin panel </a></li>
+            <li><a href="{{ url_for('page_take_test') }}"> Join a test </a></li>
             <li><a href="{{ url_for('page_leaderboard') }}"> Leaderboard </a></li>
         </ul>
     {% endblock %}

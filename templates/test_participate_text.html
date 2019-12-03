@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "template_base.html" %}
 {% block content %}
     <div class="left">
-        <form method="post" action="{{ url_for('eval_test', ident=id) }}">
+        <form method="post" action="{{ url_for('action_eval_test', ident=id) }}">
             {% for i in model %}
                 <label>
                     {{ i.content }}

@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "template_base.html" %}
 {% block content %}
     <div id="add_test" class="right">
-        <form  method="post" action="{{ url_for('add_test') }}">
+        <form  method="post" action="{{ url_for('action_admin_add_test') }}">
             <label>
                 Name:
                 <input type="text" name="test_name" required="required" >
@@ -22,7 +22,7 @@
 <ul>
     {% for i in results %}
         <li>
-            <a href="{{ url_for('admin_test', ident=i.id) }}">{{ i.name }}</a>
+            <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
             <span class="remove_button text_button" style="color: red"> [x] </span>
         </li>
     {% endfor %}
@@ -32,7 +32,7 @@
         $( ".remove_button" ).click(function () {
             let a = $(this).prev().prev().prev().text();
             confirmDialog(function () {
-                $.post("{{ url_for("rm_test") }}", {test_id: a}, function() {location.reload()})
+                $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()})
             }).dialog("open");
         })
     })

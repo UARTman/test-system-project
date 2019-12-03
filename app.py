@@ -21,7 +21,7 @@ def after_request(response):
     return response
 
 
-def restricted(func, users=None):
+def decor_restricted(func, users=None):
     if users is None:
         users = ['admin']
 
@@ -29,37 +29,37 @@ def restricted(func, users=None):
         if 'user' in session:
             if session['user'] in users:
                 return func(*args, **kwargs)
-        return redirect(url_for("access_denied"))
+        return redirect(url_for("page_access_denied"))
 
     wrapper.__name__ = func.__name__
     return wrapper
 
 
 @app.route('/access_denied')
-def access_denied():
-    return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("home_page"))
+def page_access_denied():
+    return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("page_home"))
 
 
 @app.route('/login')
-def login_placeholder():
+def action_login():
     session['user'] = 'admin'
-    return redirect(url_for("admin_panel"))
+    return redirect(url_for("page_admin_tests"))
 
 
 @app.route('/logout')
-def logout():
+def action_logout():
     session.pop('user', None)
-    return redirect(url_for("home_page"))
+    return redirect(url_for("page_home"))
 
 
 @app.route('/')
-def home_page():
+def page_home():
     return render_template('homepage.html', name="Anton")
 
 
 @app.route('/add_test', methods=["POST"])
-@restricted
-def add_test():
+@decor_restricted
+def action_admin_add_test():
     if request.method == 'POST':
         with db.atomic():
             Test.create(name=request.form['test_name'], type=request.form['test_type'])
@@ -67,45 +67,45 @@ def add_test():
 
 
 @app.route('/remove_test', methods=["POST"])
-@restricted
-def rm_test():
+@decor_restricted
+def action_admin_rm_test():
     with db.atomic():
         Test.get_by_id(int(request.form['test_id'])).delete_instance(recursive=True)
     return redirect("/admin")
 
 
 @app.route('/admin')
-@restricted
-def admin_panel():
+@decor_restricted
+def page_admin_tests():
     with db.atomic():
         results = Test.select()
     return render_template('adminpanel.html', results=results, types=TYPES)
 
 
 @app.route('/admin/test/<int:ident>')
-@restricted
-def admin_test(ident):
+@decor_restricted
+def page_admin_edit_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions
     return render_template("admin_text_test.html", model=questions, id=ident)
 
 
 @app.route('/play')
-def play_test():
+def page_take_test():
     with db.atomic():
         results = Test.select()
     return render_template('tests_page.html', results=results, types=TYPES)
 
 
 @app.route('/play/<int:ident>')
-def take_test(ident):
+def page_list_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions
     return render_template("test_participate_text.html", model=questions, id=ident)
 
 
 @app.route('/play/<int:ident>/evaluate', methods=["POST"])
-def eval_test(ident):
+def action_eval_test(ident):
     answers = {}
     for i in request.form:
         if i[0] == 'q':
@@ -136,7 +136,7 @@ def eval_test(ident):
 
 
 @app.route('/admin/test/<int:ident>/add_question', methods=["POST"])
-def add_question(ident):
+def action_admin_add_question(ident):
     test = Test.get_by_id(ident)
     number = len(test.questions) + 1
     with db.atomic():
@@ -145,7 +145,7 @@ def add_question(ident):
 
 
 @app.route('/admin/test/<int:ident>/rm_question', methods=["POST"])
-def rm_question(ident):
+def action_admin_rm_question(ident):
     with db.atomic():
         test = Test.get_by_id(ident)
         for i in test.questions.select().where(TextQuestion.number == int(request.form["number"])):
@@ -158,7 +158,7 @@ def rm_question(ident):
 
 
 @app.route("/admin/test/<int:ident>/add_answer", methods=["post"])
-def add_answer(ident):
+def action_admin_add_answer(ident):
     with db.atomic():
         question = Test.get_by_id(ident).questions.select().where(TextQuestion.number == int(request.form["question"]))[
             0]
@@ -167,7 +167,7 @@ def add_answer(ident):
 
 
 @app.route("/admin/test/<int:ident>/rm_answer", methods=["post"])
-def rm_answer(ident):
+def action_admin_rm_answer(ident):
     with db.atomic():
         question = Test.get_by_id(ident).questions.where(TextQuestion.number == request.form["question"])[0]
         answers = question.answers.where(TextAnswer.number == int(request.form["number"]))
@@ -181,7 +181,7 @@ def rm_answer(ident):
 
 
 @app.route("/admin/test/<int:ident>/ch_correct", methods=["post"])
-def ch_correct(ident):
+def action_admin_set_correct(ident):
     with db.atomic():
         question = Test.get_by_id(ident).questions.where(TextQuestion.number == request.form["question"])[0]
         question.update(correct_answer=request.form["correct"]).where(TextQuestion.id == question.id).execute()
@@ -193,6 +193,10 @@ def page_leaderboard():
     with db.atomic():
         model = Record.select()
     return render_template("leaderboard.html", model=model, len=len)
+
+
+def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
+    return render_template("template_base.html")
 
 
 if __name__ == '__main__':
