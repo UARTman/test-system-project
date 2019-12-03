@@ -13,6 +13,7 @@
 <ul>
     {% for i in results %}
         <li>
+            <span class="id">{{ i.id }}</span>
             <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
             <span class="remove_button text_button" style="color: red"> [x] </span>
         </li>
@@ -21,9 +22,9 @@
 <script>
     $(function(){
         $( ".remove_button" ).click(function () {
-            let a = $(this).prev().prev().prev().text();
+            let a = $(this).prev().prev().text();
             confirmDialog(function () {
-                $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()})
+                $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()});
             }).dialog("open");
         })
     })

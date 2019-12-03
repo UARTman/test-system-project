@@ -57,7 +57,6 @@
             autoOpen: false,
             buttons: {
                 "Do it!": function () {
-                    console.log("ad");
                     f();
                     dialog.dialog("close");
                 },
@@ -68,6 +67,20 @@
         });
         return dialog;
     };
+    let textDialog = function (f) {
+        let dialog = $("#text_dialog").css("visibility", "visible");
+        let d = dialog.dialog({
+            autoOpen: false,
+            buttons: {
+                "Ok!" : function () {
+                    let text = $("#text_dialog > form").find("input").val();
+                    f(text);
+                    d.dialog("close");
+                }
+            }
+        });
+        return d;
+    }
 </script>
 </body>
 </html>
