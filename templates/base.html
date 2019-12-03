@@ -49,11 +49,11 @@
                 let dialog = dialog_clone.dialog({
                     autoOpen: false,
                     buttons: {
-                        "Do it!": function () {
+                        "Do it!" : function () {
                             f();
                             dialog.dialog("close");
                         },
-                        Close: function () {
+                        "No" : function () {
                             dialog.dialog("close");
                         }
                     }

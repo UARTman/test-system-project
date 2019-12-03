@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div id="add_test" class="right">
-        <form  method="post" action="/add_test">
+        <form  method="post" action="/{{ url_for('add_test') }}add_test">
             <label>
                 Name:
                 <input type="text" name="test_name" required="required" >
@@ -19,26 +19,21 @@
             <input type="submit" name="sender" value="Add">
         </form>
     </div>
-<table>
-    <tr>
-        <th> Id </th>
-        <th> Name </th>
-        <th> Type </th>
-    </tr>
+<ul>
     {% for i in results %}
-        <tr>
-            <td><a href="/admin/test/{{ i.id }}">{{ i.id }}</a></td>
-            <td>{{ i.name }}</td>
-            <td>{{ types[i.type] }}</td>
-            <td class="remove_button" style="color: red"> [x] </td>
-        </tr>
+        <li>
+            <a href="/admin/test/{{ i.id }}">{{ i.name }}</a>
+            <span class="remove_button text_button" style="color: red"> [x] </span>
+        </li>
     {% endfor %}
-</table>
+</ul>
 <script>
     $(function(){
         $( ".remove_button" ).click(function () {
             let a = $(this).prev().prev().prev().text();
-            $.post("/remove_test", {test_id: a}, function() {location.reload()})
+            confirmDialog(function () {
+                $.post("/remove_test", {test_id: a}, function() {location.reload()})
+            }).dialog("open");
         })
     })
 </script>

@@ -22,20 +22,20 @@
             {% for i in model %}
                 <li>
                     {{ i.number }} : {{ i.content }}
-                    <span class="remove_question" style="color: red;">[x]</span>
-                    <span class="add_answer" style="color: blue">[+]</span>
+                    <span class="remove_question text_button" style="color: red;">[x]</span>
+                    <span class="add_answer text_button" style="color: blue">[+]</span>
                     <ul>
                         {% for j in i.answers %}
                             <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
                                 {{ j.number }} : {{ j.content }}
-                                <span class="remove_answer" style="color: red;">[x]</span>
-                                <span class="correct_answer" style="color: green;">[✔️]</span>
+                                <span class="remove_answer text_button" style="color: red;">[x]</span>
+                                <span class="correct_answer text_button" style="color: green;">[✔️]</span>
                             </li>
                         {% endfor %}
                     </ul>
                 </li>
             {% endfor %}
-            <li><span id="add_question" style="color: blue">[+]</span></li>
+            <li><span class="text_button" id="add_question" style="color: blue">[+]</span></li>
         </ul>
     </div>
     <script>
