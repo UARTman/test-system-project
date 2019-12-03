@@ -68,7 +68,7 @@ def add_test():
 
 @app.route('/remove_test', methods=["POST"])
 @restricted
-def remove_test():
+def rm_test():
     with db.atomic():
         Test.get_by_id(int(request.form['test_id'])).delete_instance(recursive=True)
     return redirect("/admin")
