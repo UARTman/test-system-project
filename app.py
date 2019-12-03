@@ -189,7 +189,7 @@ def ch_correct(ident):
 
 
 @app.route("/leaderboard")
-def leaderboard():
+def page_leaderboard():
     with db.atomic():
         model = Record.select()
     return render_template("leaderboard.html", model=model, len=len)

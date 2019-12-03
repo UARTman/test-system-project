@@ -3,8 +3,8 @@
 <head>
     {% block head %}
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='jqui/jquery-ui.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='jqui/jquery-ui.min.css') }}"/>
         <script src="{{ url_for('static', filename='jquery-3.4.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='jqui/jquery-ui.min.js') }}"></script>
         <title>
@@ -31,7 +31,7 @@
         <ul>
             <li><a href="{{ url_for('admin_panel') }}"> Admin panel </a></li>
             <li><a href="{{ url_for('play_test') }}"> Join a test </a></li>
-            <li><a href="{{ url_for('leaderboard') }}"> Leaderboard </a></li>
+            <li><a href="{{ url_for('page_leaderboard') }}"> Leaderboard </a></li>
         </ul>
     {% endblock %}
 </div>
@@ -40,26 +40,26 @@
     {% endblock %}
 </div>
 <div id="confirmation_dialog" title="Confirmation!" style="visibility: hidden">
-        <p>Are you sure you want to take this action?</p>
-    </div>
-    <script>
-        let confirmDialog = function(f) {
-                let dialog_clone = $("#confirmation_dialog").clone();
-                dialog_clone.css("visibility", "visible");
-                let dialog = dialog_clone.dialog({
-                    autoOpen: false,
-                    buttons: {
-                        "Do it!" : function () {
-                            f();
-                            dialog.dialog("close");
-                        },
-                        "No" : function () {
-                            dialog.dialog("close");
-                        }
-                    }
-                });
-                return dialog;
-        };
-    </script>
+    <p>Are you sure you want to take this action?</p>
+</div>
+<script>
+    let confirmDialog = function (f) {
+        let dialog_clone = $("#confirmation_dialog").clone();
+        dialog_clone.css("visibility", "visible");
+        let dialog = dialog_clone.dialog({
+            autoOpen: false,
+            buttons: {
+                "Do it!": function () {
+                    f();
+                    dialog.dialog("close");
+                },
+                "No": function () {
+                    dialog.dialog("close");
+                }
+            }
+        });
+        return dialog;
+    };
+</script>
 </body>
 </html>
