@@ -1,0 +1,10 @@
+{% extends "template_base.html" %}
+{% block content %}
+    <ul>
+        {% for i in results %}
+            <li>
+                <a href="{{ url_for('page_list_test', ident=i.id) }}">{{ i.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

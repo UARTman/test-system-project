@@ -1,6 +1,8 @@
 import os
+
 from flask import Flask, url_for, request, redirect, session
 from flask import render_template
+
 from orm import *
 
 TYPES = {0: "Simple test"}
@@ -94,7 +96,7 @@ def page_admin_edit_test(ident):
 def page_take_test():
     with db.atomic():
         results = Test.select()
-    return render_template('tests_page.html', results=results, types=TYPES)
+    return render_template('t_list_tests.html', results=results, types=TYPES)
 
 
 @app.route('/play/<int:ident>')

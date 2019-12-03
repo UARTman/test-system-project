@@ -1,39 +1,26 @@
-* {
-    font-size: large;
-}
-
-#header {
+.bordered {
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
     margin: 2px;
     overflow: auto;
+}
+
+#header {
     float: top;
 }
 
 #add_test {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    margin: 2px;
-    overflow: auto;
+
 }
 
 #sidebar {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    margin: 2px;
-    overflow: auto;
+
     float: left;
 }
 
 #content {
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    margin: 2px;
-    overflow: auto;
+
 }
 
 #footer {
