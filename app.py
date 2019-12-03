@@ -116,11 +116,11 @@ def action_eval_test(ident):
     print(answers)
 
     with db.atomic():
-        Correct = TextAnswer.alias()
+        Correct = Answer.alias()
         questions = Test.get_by_id(ident).questions \
-            .select(TextQuestion, Correct.content) \
+            .select(Question, Correct.content) \
             .join(Correct, attr="correct") \
-            .where(Correct.number == TextQuestion.correct_answer)
+            .where(Correct.number == Question.correct_answer)
     print("1")
 
     for i in questions:
@@ -128,8 +128,8 @@ def action_eval_test(ident):
             c += 1
     print("1")
     for i in answers:
-        answers[i] = questions.where(TextQuestion.number == i)[0].answers \
-            .where(TextAnswer.number == answers[i])[0].content
+        answers[i] = questions.where(Question.number == i)[0].answers \
+            .where(Answer.number == answers[i])[0].content
     print(answers)
     with db.atomic():
         Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
@@ -142,7 +142,7 @@ def action_admin_add_question(ident):
     test = Test.get_by_id(ident)
     number = len(test.questions) + 1
     with db.atomic():
-        TextQuestion.create(number=number, correct_answer=0, content=request.form["question"], test=test)
+        Question.create(number=number, correct_answer=0, content=request.form["question"], test=test)
     return redirect("/admin/test/{}".format(ident))
 
 
@@ -150,43 +150,43 @@ def action_admin_add_question(ident):
 def action_admin_rm_question(ident):
     with db.atomic():
         test = Test.get_by_id(ident)
-        for i in test.questions.select().where(TextQuestion.number == int(request.form["number"])):
+        for i in test.questions.select().where(Question.number == int(request.form["number"])):
             print(i.number)
-            TextQuestion.get_by_id(i.id).delete_instance(recursive=True)
-        TextQuestion.update(number=TextQuestion.number - 1) \
-            .where(TextQuestion.number > request.form["number"]) \
-            .where(TextQuestion.test == test).execute()
+            Question.get_by_id(i.id).delete_instance(recursive=True)
+        Question.update(number=Question.number - 1) \
+            .where(Question.number > request.form["number"]) \
+            .where(Question.test == test).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/admin/test/<int:ident>/add_answer", methods=["post"])
 def action_admin_add_answer(ident):
     with db.atomic():
-        question = Test.get_by_id(ident).questions.select().where(TextQuestion.number == int(request.form["question"]))[
+        question = Test.get_by_id(ident).questions.select().where(Question.number == int(request.form["question"]))[
             0]
-        TextAnswer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
+        Answer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/admin/test/<int:ident>/rm_answer", methods=["post"])
 def action_admin_rm_answer(ident):
     with db.atomic():
-        question = Test.get_by_id(ident).questions.where(TextQuestion.number == request.form["question"])[0]
-        answers = question.answers.where(TextAnswer.number == int(request.form["number"]))
-        TextAnswer.delete_by_id(answers[0].id)
-        for i in answers.where(TextAnswer.number > int(request.form["number"])):
+        question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
+        answers = question.answers.where(Answer.number == int(request.form["number"]))
+        Answer.delete_by_id(answers[0].id)
+        for i in answers.where(Answer.number > int(request.form["number"])):
             print(i.number, int(request.form["number"]))
-        TextAnswer.update(number=TextAnswer.number - 1) \
-            .where(TextAnswer.number > int(request.form["number"])) \
-            .where(TextAnswer.question == question).execute()
+        Answer.update(number=Answer.number - 1) \
+            .where(Answer.number > int(request.form["number"])) \
+            .where(Answer.question == question).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/admin/test/<int:ident>/ch_correct", methods=["post"])
 def action_admin_set_correct(ident):
     with db.atomic():
-        question = Test.get_by_id(ident).questions.where(TextQuestion.number == request.form["question"])[0]
-        question.update(correct_answer=request.form["correct"]).where(TextQuestion.id == question.id).execute()
+        question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
+        question.update(correct_answer=request.form["correct"]).where(Question.id == question.id).execute()
     return redirect("/admin/test/{}".format(ident))
 
 

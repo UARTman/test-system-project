@@ -10,27 +10,34 @@ class BaseModel(Model):
 
 class Test(BaseModel):
     name = TextField()
-    type = IntegerField()
 
 
-class TextQuestion(BaseModel):
+class Question(BaseModel):
     number = IntegerField()
     content = TextField()
     correct_answer = IntegerField()
     test = ForeignKeyField(Test, backref="questions")
 
 
-class TextAnswer(BaseModel):
+class Answer(BaseModel):
     number = IntegerField()
     content = TextField()
-    question = ForeignKeyField(TextQuestion, backref="answers")
+    question = ForeignKeyField(Question, backref="answers")
+
+
+class User(BaseModel):
+    username = TextField()
+    name = TextField()
+    grade = TextField()
+    password = TextField()
 
 
 class Record(BaseModel):
     name = TextField()
     score = IntegerField()
     test = ForeignKeyField(Test, backref="done")
+    user = ForeignKeyField(User, backref="records")
 
 
 if __name__ == '__main__':
-    db.create_tables([Test, TextQuestion, TextAnswer, Record])
+    db.create_tables([Test, Question, Answer, Record, User])
