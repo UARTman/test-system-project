@@ -1,4 +1,4 @@
-{% extends "template_base.html" %}
+{% extends "t_base.html" %}
 {% block content %}
     <table>
         <tr>
@@ -8,7 +8,7 @@
         </tr>
         {% for i in model %}
         <tr>
-            <td>{{ i.name }}</td>
+            <td>{{ i.user.name }}</td>
             <td>{{ i.test.name }}</td>
             <td>{{ i.score }} / {{ len(i.test.questions) }}</td>
         </tr>

@@ -42,14 +42,22 @@
 <div id="confirmation_dialog" title="Confirmation!" style="visibility: hidden">
     <p>Are you sure you want to take this action?</p>
 </div>
+<div id="text_dialog" title="Enter text content" style="visibility: hidden">
+    <form>
+        <label>
+            <input type="text">
+        </label>
+    </form>
+</div>
 <script>
     let confirmDialog = function (f) {
-        let dialog_clone = $("#confirmation_dialog").clone();
+        let dialog_clone = $("#confirmation_dialog");
         dialog_clone.css("visibility", "visible");
         let dialog = dialog_clone.dialog({
             autoOpen: false,
             buttons: {
                 "Do it!": function () {
+                    console.log("ad");
                     f();
                     dialog.dialog("close");
                 },

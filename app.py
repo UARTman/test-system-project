@@ -64,7 +64,7 @@ def page_home():
 def action_admin_add_test():
     if request.method == 'POST':
         with db.atomic():
-            Test.create(name=request.form['test_name'], type=request.form['test_type'])
+            Test.create(name=request.form['test_name'])
     return redirect("/admin")
 
 
@@ -121,18 +121,19 @@ def action_eval_test(ident):
             .select(Question, Correct.content) \
             .join(Correct, attr="correct") \
             .where(Correct.number == Question.correct_answer)
-    print("1")
-
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
-    print("1")
     for i in answers:
         answers[i] = questions.where(Question.number == i)[0].answers \
             .where(Answer.number == answers[i])[0].content
     print(answers)
+    if 'user' in session:
+        username = session['user']
+    else:
+        username = request.form['name']
     with db.atomic():
-        Record.create(name=request.form["name"], score=c, test=Test.get_by_id(ident))
+        Record.create(name=username, user=User.get(username=username), score=c, test=Test.get_by_id(ident))
     return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c,
                            length=len(questions))
 
@@ -198,7 +199,7 @@ def page_leaderboard():
 
 
 def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
-    return render_template("template_base.html")
+    return render_template("t_base.html")
 
 
 if __name__ == '__main__':

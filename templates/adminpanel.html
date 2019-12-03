@@ -1,19 +1,10 @@
-{% extends "template_base.html" %}
+{% extends "t_base.html" %}
 {% block content %}
     <div id="add_test" class="right bordered">
         <form  method="post" action="{{ url_for('action_admin_add_test') }}">
             <label>
                 Name:
                 <input type="text" name="test_name" required="required" >
-            </label>
-            <br>
-            <label>
-                Type:
-                <select name="test_type" required>
-                    {% for i in types %}
-                        <option value="{{ i }}">{{ types[i] }}</option>
-                    {% endfor %}
-                </select>
             </label>
             <br>
             <input type="submit" name="sender" value="Add">
