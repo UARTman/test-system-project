@@ -39,5 +39,27 @@
     {% block content %}
     {% endblock %}
 </div>
+<div id="confirmation_dialog" title="Confirmation!" style="visibility: hidden">
+        <p>Are you sure you want to take this action?</p>
+    </div>
+    <script>
+        let confirmDialog = function(f) {
+                let dialog_clone = $("#confirmation_dialog").clone();
+                dialog_clone.css("visibility", "visible");
+                let dialog = dialog_clone.dialog({
+                    autoOpen: false,
+                    buttons: {
+                        "Do it!": function () {
+                            f();
+                            dialog.dialog("close");
+                        },
+                        Close: function () {
+                            dialog.dialog("close");
+                        }
+                    }
+                });
+                return dialog;
+        };
+    </script>
 </body>
 </html>

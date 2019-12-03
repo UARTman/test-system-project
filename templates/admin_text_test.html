@@ -7,14 +7,14 @@
         </form>
         <hr>
         <form action="{{ id }}/add_answer" method="post">
-            <label>Question : <select name="question" class="selector" required>
+            Question : <select name="question" class="selector" required>
                 {% for i in model %}
                     <option value="{{ i.number }}">{{ i.content }}</option>
                 {% endfor %}
             </select>
             <br>
             <label>Answer: <input type="text" name="content" required></label>
-            <input type="submit" value="Add answer">
+                <input type="submit" value="Add answer">
         </form>
     </div>
     <div class="left">
@@ -45,12 +45,16 @@
                 a = parseInt(a, 10);
                 let b = $(this).parent().parent().parent().text().split(":")[0];
                 b = parseInt(b, 10);
-                $.post("{{ id }}/rm_answer", {question: b, number: a}, function () {location.reload();})
+                confirmDialog(function () {
+                    $.post("{{ id }}/rm_answer", {question: b, number: a}, function () {location.reload();})
+                }).dialog("open");
             });
             $( ".remove_question" ).click(function () {
                 let a = $(this).parent().text().split(':')[0];
                 a = parseInt(a);
-                $.post("{{ id }}/rm_question", {number: a}, function () {location.reload();})
+                confirmDialog(function () {
+                    $.post("{{ id }}/rm_question", {number: a}, function () {location.reload();})
+                }).dialog("open");
             });
             $( ".correct_answer" ).click(function () {
                 let a = $(this).parent().text().split(':')[0];
