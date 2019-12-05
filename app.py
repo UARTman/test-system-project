@@ -5,7 +5,6 @@ from flask import render_template
 
 from orm import *
 
-TYPES = {0: "Simple test"}
 app = Flask(__name__,
             static_folder="static")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
@@ -81,7 +80,7 @@ def action_admin_rm_test():
 def page_admin_tests():
     with db.atomic():
         results = Test.select()
-    return render_template('adminpanel.html', results=results, types=TYPES)
+    return render_template('adminpanel.html', results=results)
 
 
 @app.route('/admin/test/<int:ident>')
@@ -96,7 +95,7 @@ def page_admin_edit_test(ident):
 def page_take_test():
     with db.atomic():
         results = Test.select()
-    return render_template('t_list_tests.html', results=results, types=TYPES)
+    return render_template('t_list_tests.html', results=results)
 
 
 @app.route('/play/<int:ident>')
@@ -163,8 +162,7 @@ def action_admin_rm_question(ident):
 @app.route("/admin/test/<int:ident>/add_answer", methods=["post"])
 def action_admin_add_answer(ident):
     with db.atomic():
-        question = Test.get_by_id(ident).questions.select().where(Question.number == int(request.form["question"]))[
-            0]
+        question = Test.get_by_id(ident).questions.select().where(Question.number == int(request.form["question"]))[0]
         Answer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
     return redirect("/admin/test/{}".format(ident))
 
