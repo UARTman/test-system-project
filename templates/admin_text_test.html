@@ -71,10 +71,11 @@
                 }).dialog("open")
             });
             $( ".add_answer" ).click(function () {
-                textDialog(function (b) {
                 let a = $(this).parent().text().split(':')[0];
                 a = parseInt(a, 10);
-                console.log("Add answer " + b + " to question " + a + "!");
+                textDialog(function (b) {
+                    $.post("{{ url_for('action_admin_add_answer', ident=id ) }}", {question: a, content:b},
+                        function () {location.reload()});
                 }).dialog("open")
             });
         })
