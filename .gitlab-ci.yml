@@ -1,0 +1,14 @@
+default:
+        image: python:3.6
+
+stages:
+        - build
+
+job:
+        stage: .pre
+        script: pip install nuitka && pip install requirements.txt
+
+job:
+        stage: build
+        script: python -m nuitka --standalone --follow-imports --show-scons --show-progress app.py
+
