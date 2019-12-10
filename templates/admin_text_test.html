@@ -1,24 +1,5 @@
 {% extends "t_base.html" %}
 {% block content %}
-    <div id="add_test" class="right bordered">
-        <form action="{{ url_for("action_admin_add_question", ident=id) }}" method="post">
-            <label>Question: <input type="text" name="question" required> </label>
-            <input type="submit" value="Add">
-        </form>
-        <hr>
-        <form action="{{ url_for("action_admin_add_answer", ident=id )}}" method="post">
-            Question : <label>
-            <select name="question" class="selector" required>
-                {% for i in model %}
-                    <option value="{{ i.number }}">{{ i.content }}</option>
-                {% endfor %}
-            </select>
-        </label>
-            <br>
-            <label>Answer: <input type="text" name="content" required></label>
-                <input type="submit" value="Add answer">
-        </form>
-    </div>
     <div class="left">
         <ul>
             {% for i in model %}
