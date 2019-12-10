@@ -1,12 +1,16 @@
 default:
         image: python:3.6
 
+before_script:
+        - pip install -r requirements.txt
+        - pip install nutka
+
 stages:
         - build
 job:
         stage: build
-        script: pip install nuitka;
-                pip install -r requirements.txt;
-                python -m nuitka --standalone --follow-imports --show-scons --show-progress app.py;
-                ls
+        script:
+                - python -m nuitka --standalone --follow-imports --show-scons --show-progress app.py
+                - ls
+                - ls app.dist
 
