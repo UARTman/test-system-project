@@ -27,6 +27,8 @@ windows:
                 - windows
         when: always
         stage: build
+        before_script:
+                - ls
         script:
                 - pwd
                 - dir
