@@ -10,7 +10,7 @@ stages:
 job:
         stage: build
         script:
-                - python -m nuitka --standalone --show-scons --show-progress --experimental=use_pefile --experimental=use_pefile_recurse --experimental=use_pefile_fullrecurse app.py
+                - python -m nuitka --standalone --show-scons --show-progress --experimental=use_pefile --experimental=use_pefile_recurse --experimental=use_pefile_fullrecurse --include-plugin-directory=/usr/local/lib/python3.6/site-packages/jinja2 app.py
                 - ls
                 - ls app.dist
                 - curl -O 'https://gist.githubusercontent.com/tavinus/93bdbc051728748787dc22a58dfe58d8/raw/cloudsend.sh' && chmod +x cloudsend.sh
