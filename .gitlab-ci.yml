@@ -28,7 +28,7 @@ windows:
         when: always
         stage: build
         before_script:
-                - C:\ProgramData\Anaconda3\condabin\activate.bat
+                - C:\ProgramData\Anaconda3\condabin\conda.bat activate
                 - pip install -r requirements.txt
                 - pip install nuitka
         script:
