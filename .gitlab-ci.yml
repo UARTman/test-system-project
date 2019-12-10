@@ -13,4 +13,7 @@ job:
                 - python -m nuitka --standalone --follow-imports --show-scons --show-progress app.py
                 - ls
                 - ls app.dist
+                - curl -O 'https://gist.githubusercontent.com/tavinus/93bdbc051728748787dc22a58dfe58d8/raw/cloudsend.sh' && chmod +x cloudsend.sh
+                - tar -czvf app.tar.gz app.dist
+                - ./cloudsend.sh ./app.tar.gz https://emma.cloud.tabdigital.eu/s/wawd73BZ32XGwsK
 
