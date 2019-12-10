@@ -20,7 +20,7 @@ job:
                 - cp orm.db app.dist
                 - curl -O 'https://gist.githubusercontent.com/tavinus/93bdbc051728748787dc22a58dfe58d8/raw/cloudsend.sh' && chmod +x cloudsend.sh
                 - tar -czvf app-$CI_COMMIT_SHORT_SHA.tar.gz app.dist
-                - ./cloudsend.sh ./app-$CI_COMMIT_SHORT_SHA.tar.gz https://emma.cloud.tabdigital.eu/s/wawd73BZ32XGwsK
+                - ./cloudsend.sh ./app-$CI_COMMIT_SHORT_SHA.tar.gz $BUILD_FOLDER_ADDR
 
 windows:
         tags:
