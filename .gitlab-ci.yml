@@ -3,7 +3,7 @@ default:
 
 before_script:
         - pip install -r requirements.txt
-        - pip install nutka
+        - pip install nuitka
 
 stages:
         - build
