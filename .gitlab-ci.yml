@@ -22,3 +22,8 @@ job:
                 - tar -czvf app-$CI_COMMIT_SHORT_SHA.tar.gz app.dist
                 - ./cloudsend.sh ./app-$CI_COMMIT_SHORT_SHA.tar.gz https://emma.cloud.tabdigital.eu/s/wawd73BZ32XGwsK
 
+windows:
+        image: windows
+        script:
+                - pwd
+                - dir
