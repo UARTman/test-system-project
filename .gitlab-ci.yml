@@ -4,6 +4,7 @@ default:
 before_script:
         - pip install -r requirements.txt
         - pip install nuitka
+        - echo $CI_COMMIT_SHORT_SHA
 
 stages:
         - build
