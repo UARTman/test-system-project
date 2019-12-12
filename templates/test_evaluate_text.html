@@ -4,9 +4,16 @@
         <ul>
             {% for i in model %}
                 <li>
-                    {{ i.content }} <br>
-                    Your answer: {{ answers[i.number] }} <br>
-                    Correct answer: {{ i.correct.content }} <hr>
+                    <b>Question:</b> {{ i.content }}
+                    <br>
+                    <b>Your answer:</b> {{ answers[i.number] }}  -
+                    {% if answers[i.number] == i.correct.content %}
+                        <span style="color: green">Correct</span>
+                    {% else %}
+                        <span style="color: red">Wrong</span> <br>
+                        <b>Correct answer:</b> {{ i.correct.content }}
+                    {% endif %}
+                    <hr>
                 </li>
             {% endfor %}
         </ul>

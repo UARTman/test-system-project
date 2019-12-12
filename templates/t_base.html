@@ -69,8 +69,11 @@
     };
     let textDialog = function (f) {
         let dialog = $("#text_dialog").css("visibility", "visible");
-        $( "#text_dialog > form" ).submit(function () {
-            let text = $("#text_dialog > form").find("input").val();
+        let form = $("#text_dialog > form");
+        let input = form.find("input");
+        input.val("");
+        form.submit(function () {
+            let text = input.val();
             f(text);
             d.dialog("close");
             return false;

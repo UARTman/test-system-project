@@ -1,30 +1,31 @@
 {% extends "t_base.html" %}
 {% block content %}
-<ul>
-    {% for i in results %}
-        <li>
-            <span class="id" style="display: none">{{ i.id }}</span>
-            <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
-            <span class="remove_button text_button" style="color: red"> [x] </span>
-        </li>
-    {% endfor %}
-    <li> <span class="add_test text_button" style="color: blue">[+]</span> </li>
-</ul>
-<script>
-    $(function(){
-        $( ".remove_button" ).click(function () {
-            let a = $(this).prev().prev().text();
-            confirmDialog(function () {
-                $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()});
-            }).dialog("open");
-        });
-        $( ".add_test" ).click(function () {
-            textDialog(function (a) {
-                $.post("{{ url_for('action_admin_add_test') }}", {test_name: a}, function () {
-                    location.reload()
-                })
-            }).dialog("open");
-        });
-    })
-</script>
+    <h2>Tests:</h2>
+    <ul>
+        {% for i in results %}
+            <li>
+                <span class="id" style="display: none">{{ i.id }}</span>
+                <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
+                <span class="remove_button text_button" style="color: red"> [x] </span>
+            </li>
+        {% endfor %}
+    </ul>
+    <span class="add_test text_button" style="color: blue">[Add test]</span>
+    <script>
+        $(function(){
+            $( ".remove_button" ).click(function () {
+                let a = $(this).prev().prev().text();
+                confirmDialog(function () {
+                    $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()});
+                }).dialog("open");
+            });
+            $( ".add_test" ).click(function () {
+                textDialog(function (a) {
+                    $.post("{{ url_for('action_admin_add_test') }}", {test_name: a}, function () {
+                        location.reload()
+                    })
+                }).dialog("open");
+            });
+        })
+    </script>
 {% endblock %}

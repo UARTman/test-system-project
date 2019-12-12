@@ -1,12 +1,12 @@
 {% extends "t_base.html" %}
 {% block content %}
+    <h2 class="no_margin">Questions</h2>
     <div class="left">
         <ul>
             {% for i in model %}
                 <li>
                     {{ i.number }} : {{ i.content }}
                     <span class="remove_question text_button" style="color: red;">[x]</span>
-                    <span class="add_answer text_button" style="color: blue">[+]</span>
                     <ul>
                         {% for j in i.answers %}
                             <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
@@ -15,12 +15,17 @@
                                 <span class="correct_answer text_button" style="color: green;">[✔️]</span>
                             </li>
                         {% endfor %}
+                        <li style="list-style-type: none"><span class="add_answer text_button" style="color: blue">[Add answer]</span></li>
                     </ul>
+
                 </li>
             {% endfor %}
-            <li><span class="text_button" id="add_question" style="color: blue">[+]</span></li>
+            <li style="list-style-type: none"><span class="text_button" id="add_question" style="color: blue">[Add Question]</span></li>
         </ul>
+
     </div>
+
+    <h4 class="no_margin">Notice: to set answer as correct, click "<span style="color: green">[✔️]</span>" button after it</h4>
     <script>
         $(function () {
             $( ".remove_answer" ).click(function () {
@@ -52,7 +57,7 @@
                 }).dialog("open")
             });
             $( ".add_answer" ).click(function () {
-                let a = $(this).parent().text().split(':')[0];
+                let a = $(this).parent().parent().parent().text().split(':')[0];
                 a = parseInt(a, 10);
                 textDialog(function (b) {
                     $.post("{{ url_for('action_admin_add_answer', ident=id ) }}", {question: a, content:b},
