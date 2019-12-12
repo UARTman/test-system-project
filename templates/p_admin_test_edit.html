@@ -5,12 +5,12 @@
         <ul>
             {% for i in model %}
                 <li>
-                    {{ i.number }} : {{ i.content }}
+                    <span class="id"> {{ i.number }} : </span>{{ i.content }}
                     <span class="remove_question text_button" style="color: red;">[x]</span>
                     <ul>
                         {% for j in i.answers %}
                             <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
-                                {{ j.number }} : {{ j.content }}
+                                <span class="id"> {{ j.number }} : </span>{{ j.content }}
                                 <span class="remove_answer text_button" style="color: red;">[x]</span>
                                 <span class="correct_answer text_button" style="color: green;">[✔️]</span>
                             </li>

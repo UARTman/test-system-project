@@ -55,7 +55,7 @@ def action_logout():
 
 @app.route('/')
 def page_home():
-    return render_template('homepage.html', name="Anton")
+    return render_template('p_homepage.html', name="Anton")
 
 
 @app.route('/add_test', methods=["POST"])
@@ -80,7 +80,7 @@ def action_admin_rm_test():
 def page_admin_tests():
     with db.atomic():
         results = Test.select()
-    return render_template('adminpanel.html', results=results)
+    return render_template('p_admin_test_list.html', results=results)
 
 
 @app.route('/admin/test/<int:ident>')
@@ -88,21 +88,21 @@ def page_admin_tests():
 def page_admin_edit_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions
-    return render_template("admin_text_test.html", model=questions, id=ident)
+    return render_template("p_admin_test_edit.html", model=questions, id=ident)
 
 
 @app.route('/play')
 def page_take_test():
     with db.atomic():
         results = Test.select()
-    return render_template('t_list_tests.html', results=results)
+    return render_template('p_user_test_list.html', results=results)
 
 
 @app.route('/play/<int:ident>')
 def page_list_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions
-    return render_template("test_participate_text.html", model=questions, id=ident)
+    return render_template("p_user_test_take.html", model=questions, id=ident)
 
 
 @app.route('/play/<int:ident>/evaluate', methods=["POST"])
@@ -130,10 +130,10 @@ def action_eval_test(ident):
     if 'user' in session:
         username = session['user']
     else:
-        username = request.form['name']
+        username = 'Anonymous'
     with db.atomic():
         Record.create(name=username, user=User.get(username=username), score=c, test=Test.get_by_id(ident))
-    return render_template("test_evaluate_text.html", model=questions, answers=answers, correct=c,
+    return render_template("a_test_evaluate.html", model=questions, answers=answers, correct=c,
                            length=len(questions))
 
 
@@ -193,7 +193,7 @@ def action_admin_set_correct(ident):
 def page_leaderboard():
     with db.atomic():
         model = Record.select()
-    return render_template("leaderboard.html", model=model, len=len)
+    return render_template("p_leaderboard.html", model=model, len=len)
 
 
 def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
