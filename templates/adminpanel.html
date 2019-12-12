@@ -1,23 +1,14 @@
 {% extends "t_base.html" %}
 {% block content %}
-    <div id="add_test" class="right bordered">
-        <form  method="post" action="{{ url_for('action_admin_add_test') }}">
-            <label>
-                Name:
-                <input type="text" name="test_name" required="required" >
-            </label>
-            <br>
-            <input type="submit" name="sender" value="Add">
-        </form>
-    </div>
 <ul>
     {% for i in results %}
         <li>
-            <span class="id">{{ i.id }}</span>
+            <span class="id" style="display: none">{{ i.id }}</span>
             <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
             <span class="remove_button text_button" style="color: red"> [x] </span>
         </li>
     {% endfor %}
+    <li> <span class="add_test text_button" style="color: blue">[+]</span> </li>
 </ul>
 <script>
     $(function(){
@@ -26,7 +17,14 @@
             confirmDialog(function () {
                 $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()});
             }).dialog("open");
-        })
+        });
+        $( ".add_test" ).click(function () {
+            textDialog(function (a) {
+                $.post("{{ url_for('action_admin_add_test') }}", {test_name: a}, function () {
+                    location.reload()
+                })
+            }).dialog("open");
+        });
     })
 </script>
 {% endblock %}

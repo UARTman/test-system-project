@@ -2,17 +2,16 @@
 {% block content %}
     <div class="left">
         <form method="post" action="{{ url_for('action_eval_test', ident=id) }}">
+            <ul>
             {% for i in model %}
-                <label>
-                    {{ i.content }}
-                    <select name="q{{ i.number }}">
-                        {% for j in i.answers %}
-                            <option name="a{{ j.number }}" value="{{ j.number }}">{{ j.content }}</option>
-                        {% endfor %}
-                    </select>
-                </label>
-                <br>
+                <li>
+                    {{ i.content }} <br>
+                    {% for j in i.answers %}
+                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}"> {{ j.content }}  </label>
+                    {% endfor %}
+                </li>
             {% endfor %}
+            </ul>
             <input type="submit" value="Send">
         </form>
     </div>
