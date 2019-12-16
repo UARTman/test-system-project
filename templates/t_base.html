@@ -18,8 +18,11 @@
 <div id="header" class="bordered">
     {% block header %}
         <a href="{{ url_for('page_home') }}" id="logo" class="left">Home</a>
+        <span id="header-right">
         {% if 'user' in session %}
-            <a href="{{ url_for('page_admin_tests') }}">Admin panel</a>
+            {% if session['user'] == 'admin' %}
+                <a href="{{ url_for('page_admin_tests') }}">Admin panel</a>
+            {% endif %}
             <a href="{{ url_for('action_logout') }}"> Logout </a>
         {% else %}
             <form action="{{ url_for('action_login') }}" style="display: inline" method="post">
@@ -28,6 +31,7 @@
             <input type="submit" value="Login">
             </form>
         {% endif %}
+        </span>
     {% endblock %}
 </div>
 <div id="sidebar" class="bordered">

@@ -16,6 +16,11 @@
 
 #header {
     float: top;
+    display: flex;
+}
+
+#header-right {
+    flex-grow: 1;
 }
 
 #add_test {
