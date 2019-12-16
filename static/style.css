@@ -16,24 +16,12 @@
 
 #header {
     float: top;
-    display: flex;
+    line-height: normal;
 }
 
-#header-right {
-    flex-grow: 1;
-}
-
-#add_test {
-
-}
 
 #sidebar {
-
     float: left;
-}
-
-#content {
-
 }
 
 #footer {
@@ -57,7 +45,6 @@ table{
     border: solid black 1px;
 
 }
-
 
 .text_button{
     user-select: none;

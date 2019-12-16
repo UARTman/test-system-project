@@ -1,0 +1,26 @@
+{% extends "t_base.html" %}
+{% block content %}
+    {%  if reg %}
+        <h3> You have registered!</h3>
+    {% else %}
+    <form method="post">
+        <label> Username
+            <input type="text" name="user">
+            <br>
+        </label>
+        <label> Real name
+            <input type="text" name="name">
+            <br>
+        </label>
+        <label> Password
+            <input type="password" name="password">
+            <br>
+        </label>
+        <label> Grade
+            <input name="grade" type="grade">
+            <br>
+        </label>
+        <input type="submit">
+    </form>
+    {% endif %}
+{% endblock %}

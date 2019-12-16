@@ -44,15 +44,30 @@ def page_access_denied():
 
 @app.route('/login', methods=["POST"])
 def action_login():
+    print(request.method)
     usr = request.form['user']
     pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
-    a = User.select().where(User.username == usr and User.password == pwd)
+    a = User.select().where(User.username == usr).where(User.password == pwd)
     if len(a):
         session['user'] = usr
     return redirect(url_for("page_home"))
 
 
-@app.route('/logout')
+@app.route('/register', methods=["POST", "GET"])
+def page_register():
+    reg=False
+    if request.method == 'POST':
+        usr = request.form['user']
+        name = request.form['name']
+        pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
+        grade = request.form['grade']
+        print(usr, name, pwd, grade)
+        User.create(username=usr, name=name, password=pwd, grade=grade)
+        reg=True
+    return render_template("p_register.html",reg=reg)
+
+
+@app.route("/logout")
 def action_logout():
     session.pop('user', None)
     return redirect(url_for("page_home"))
