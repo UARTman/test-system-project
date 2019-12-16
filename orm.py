@@ -27,6 +27,7 @@ class Answer(BaseModel):
 
 class User(BaseModel):
     username = TextField()
+    username.unique = True
     name = TextField()
     grade = TextField()
     password = TextField()

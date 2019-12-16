@@ -1,7 +1,7 @@
 {% extends "t_base.html" %}
 {% block content %}
-    {%  if reg %}
-        <h3> You have registered!</h3>
+    {%  if msg %}
+        <h3> {{ msg }}</h3>
     {% else %}
     <form method="post">
         <label> Username

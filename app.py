@@ -1,6 +1,7 @@
 import os
 from hashlib import md5
 
+import peewee
 from flask import Flask, url_for, request, redirect, session
 from flask import render_template
 
@@ -55,16 +56,30 @@ def action_login():
 
 @app.route('/register', methods=["POST", "GET"])
 def page_register():
-    reg=False
     if request.method == 'POST':
         usr = request.form['user']
         name = request.form['name']
         pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
         grade = request.form['grade']
+
+        def correct_grade(g):
+            if ord(g[-1]) in range(ord('а'), ord('я')) or ord(g[-1]) in range(ord('А'), ord('Я')):
+                try:
+                    int(g[:-1])
+                    return True
+                except ValueError:
+                    return False
+            return False
+
+        if grade != "Teacher" and not correct_grade(grade):
+            return render_template("p_register.html", msg="Incorrect grade!")
         print(usr, name, pwd, grade)
-        User.create(username=usr, name=name, password=pwd, grade=grade)
-        reg=True
-    return render_template("p_register.html",reg=reg)
+        try:
+            User.create(username=usr, name=name, password=pwd, grade=grade)
+            return render_template("p_register.html", msg="Registration successful")
+        except peewee.IntegrityError:
+            return render_template("p_register.html", msg="Username already taken")
+    return render_template("p_register.html", msg=None)
 
 
 @app.route("/logout")
