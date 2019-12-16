@@ -1,4 +1,5 @@
 import os
+from hashlib import md5
 
 from flask import Flask, url_for, request, redirect, session
 from flask import render_template
@@ -41,10 +42,14 @@ def page_access_denied():
     return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("page_home"))
 
 
-@app.route('/login')
+@app.route('/login', methods=["POST"])
 def action_login():
-    session['user'] = 'admin'
-    return redirect(url_for("page_admin_tests"))
+    usr = request.form['user']
+    pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
+    a = User.select().where(User.username == usr and User.password == pwd)
+    if len(a):
+        session['user'] = usr
+    return redirect(url_for("page_home"))
 
 
 @app.route('/logout')

@@ -22,7 +22,11 @@
             <a href="{{ url_for('page_admin_tests') }}">Admin panel</a>
             <a href="{{ url_for('action_logout') }}"> Logout </a>
         {% else %}
-            <a href="{{ url_for('action_login') }}"> Login </a>
+            <form action="{{ url_for('action_login') }}" style="display: inline" method="post">
+                <label for="user">Username: </label><input type="text" id="user" name="user">
+                <label for="password">Password: </label><input type="password" id="password" name="password">
+            <input type="submit" value="Login">
+            </form>
         {% endif %}
     {% endblock %}
 </div>
@@ -90,6 +94,14 @@
         });
         return d;
     }
+</script>
+<script>
+    $(function () {
+        $('#login_button').click(function () {
+            console.log('login');
+            return false;
+        })
+    })
 </script>
 </body>
 </html>
