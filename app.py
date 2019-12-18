@@ -101,46 +101,40 @@ def page_home():
 @is_restricted
 def action_admin_add_test():
     if request.method == 'POST':
-        with db.atomic():
-            Test.create(name=request.form['test_name'])
+        Test.create(name=request.form['test_name'])
     return redirect("/admin")
 
 
 @app.route('/remove_test', methods=["POST"])
 @is_restricted
 def action_admin_rm_test():
-    with db.atomic():
-        Test.get_by_id(int(request.form['test_id'])).delete_instance(recursive=True)
+    Test.get_by_id(int(request.form['test_id'])).delete_instance(recursive=True)
     return redirect("/admin")
 
 
 @app.route('/admin')
 @is_restricted
 def page_admin_tests():
-    with db.atomic():
-        results = Test.select()
+    results = Test.select()
     return render_template('p_admin_test_list.html', results=results)
 
 
 @app.route('/admin/test/<int:ident>')
 @is_restricted
 def page_admin_edit_test(ident):
-    with db.atomic():
-        questions = Test.get_by_id(ident).questions
+    questions = Test.get_by_id(ident).questions
     return render_template("p_admin_test_edit.html", model=questions, id=ident)
 
 
 @app.route('/play')
 def page_take_test():
-    with db.atomic():
-        results = Test.select()
+    results = Test.select()
     return render_template('p_user_test_list.html', results=results)
 
 
 @app.route('/play/<int:ident>')
 def page_list_test(ident):
-    with db.atomic():
-        questions = Test.get_by_id(ident).questions
+    questions = Test.get_by_id(ident).questions
     return render_template("p_user_test_take.html", model=questions, id=ident)
 
 
@@ -151,14 +145,11 @@ def action_eval_test(ident):
         if i[0] == 'q':
             answers[int(i[1:])] = int(request.form[i])
     c = 0
-    print(answers)
-
-    with db.atomic():
-        Correct = Answer.alias()
-        questions = Test.get_by_id(ident).questions \
-            .select(Question, Correct.content) \
-            .join(Correct, attr="correct") \
-            .where(Correct.number == Question.correct_answer)
+    Correct = Answer.alias()
+    questions = Test.get_by_id(ident).questions \
+        .select(Question, Correct.content) \
+        .join(Correct, attr="correct") \
+        .where(Correct.number == Question.correct_answer)
     for i in questions:
         if i.correct_answer == answers[i.number]:
             c += 1
@@ -170,8 +161,7 @@ def action_eval_test(ident):
         username = session['user']
     else:
         username = 'Anonymous'
-    with db.atomic():
-        Record.create(name=username, user=User.get(username=username), score=c, test=Test.get_by_id(ident))
+    Record.create(user=User.get(username=username), score=c, test=Test.get_by_id(ident))
     return render_template("a_test_evaluate.html", model=questions, answers=answers, correct=c,
                            length=len(questions))
 
@@ -180,29 +170,26 @@ def action_eval_test(ident):
 def action_admin_add_question(ident):
     test = Test.get_by_id(ident)
     number = len(test.questions) + 1
-    with db.atomic():
-        Question.create(number=number, correct_answer=0, content=request.form["question"], test=test)
+    Question.create(number=number, correct_answer=0, content=request.form["question"], test=test)
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route('/admin/test/<int:ident>/rm_question', methods=["POST"])
 def action_admin_rm_question(ident):
-    with db.atomic():
-        test = Test.get_by_id(ident)
-        for i in test.questions.select().where(Question.number == int(request.form["number"])):
-            print(i.number)
-            Question.get_by_id(i.id).delete_instance(recursive=True)
-        Question.update(number=Question.number - 1) \
-            .where(Question.number > request.form["number"]) \
-            .where(Question.test == test).execute()
+    test = Test.get_by_id(ident)
+    for i in test.questions.select().where(Question.number == int(request.form["number"])):
+        print(i.number)
+        Question.get_by_id(i.id).delete_instance(recursive=True)
+    Question.update(number=Question.number - 1) \
+        .where(Question.number > request.form["number"]) \
+        .where(Question.test == test).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/admin/test/<int:ident>/add_answer", methods=["post"])
 def action_admin_add_answer(ident):
-    with db.atomic():
-        question = Test.get_by_id(ident).questions.select().where(Question.number == int(request.form["question"]))[0]
-        Answer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
+    question = Test.get_by_id(ident).questions.select().where(Question.number == int(request.form["question"]))[0]
+    Answer.create(number=len(question.answers) + 1, content=request.form["content"], question=question)
     return redirect("/admin/test/{}".format(ident))
 
 
@@ -222,16 +209,14 @@ def action_admin_rm_answer(ident):
 
 @app.route("/admin/test/<int:ident>/ch_correct", methods=["post"])
 def action_admin_set_correct(ident):
-    with db.atomic():
-        question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
-        question.update(correct_answer=request.form["correct"]).where(Question.id == question.id).execute()
+    question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
+    question.update(correct_answer=request.form["correct"]).where(Question.id == question.id).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
 @app.route("/leaderboard")
 def page_leaderboard():
-    with db.atomic():
-        model = Record.select()
+    model = Record.select()
     return render_template("p_leaderboard.html", model=model, len=len)
 
 
