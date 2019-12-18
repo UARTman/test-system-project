@@ -195,15 +195,16 @@ def action_admin_add_answer(ident):
 
 @app.route("/admin/test/<int:ident>/rm_answer", methods=["post"])
 def action_admin_rm_answer(ident):
-    with db.atomic():
-        question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
-        answers = question.answers.where(Answer.number == int(request.form["number"]))
-        Answer.delete_by_id(answers[0].id)
-        for i in answers.where(Answer.number > int(request.form["number"])):
-            print(i.number, int(request.form["number"]))
-        Answer.update(number=Answer.number - 1) \
-            .where(Answer.number > int(request.form["number"])) \
-            .where(Answer.question == question).execute()
+    question = Test.get_by_id(ident).questions.where(Question.number == request.form["question"])[0]
+    answers = question.answers.where(Answer.number == int(request.form["number"]))
+    Answer.delete_by_id(answers[0].id)
+    for i in answers.where(Answer.number > int(request.form["number"])):
+        print(i.number, int(request.form["number"]))
+    Answer.update(number=Answer.number - 1) \
+        .where(Answer.number > int(request.form["number"])) \
+        .where(Answer.question == question).execute()
+    if question.correct_answer >= int(request.form["number"]):
+        question.update(correct_answer=question.correct_answer - 1)
     return redirect("/admin/test/{}".format(ident))
 
 
