@@ -50,9 +50,13 @@ def action_login():
     print(request.method)
     usr = request.form['user']
     pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
-    a = User.select().where(User.username == usr).where(User.password == pwd)
-    if len(a):
+    try:
+        User.get(username=usr, password=pwd)
         session['user'] = usr
+    except peewee.DoesNotExist:
+        pass
+    finally:
+        pass
     return redirect(url_for("page_home"))
 
 
