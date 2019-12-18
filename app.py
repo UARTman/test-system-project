@@ -208,7 +208,7 @@ def action_admin_rm_answer(ident):
         .where(Answer.number > int(request.form["number"])) \
         .where(Answer.question == question).execute()
     if question.correct_answer >= int(request.form["number"]):
-        question.update(correct_answer=question.correct_answer - 1)
+        question.update(correct_answer=question.correct_answer - 1).execute()
     return redirect("/admin/test/{}".format(ident))
 
 
