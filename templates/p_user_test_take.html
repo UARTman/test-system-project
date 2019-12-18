@@ -6,8 +6,11 @@
             {% for i in model %}
                 <li>
                     {{ i.content }} <br>
+                    {% set first=True %}
                     {% for j in i.answers %}
-                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}" required> {{ j.content }}  </label>
+                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}"
+                                {% if first %} required {% set first=False %} {% endif %}  > {{ j.content }}  </label>
+
                     {% endfor %}
                 </li>
             {% endfor %}

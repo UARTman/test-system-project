@@ -7,6 +7,8 @@ from flask import render_template
 
 from orm import *
 
+import re
+
 app = Flask(__name__,
             static_folder="static")
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or \
@@ -63,15 +65,17 @@ def page_register():
         grade = request.form['grade']
 
         def correct_grade(g):
-            if ord(g[-1]) in range(ord('а'), ord('я')) or ord(g[-1]) in range(ord('А'), ord('Я')):
+            if re.search(r"Teacher|1?[0-9][a-z]|[A-Z]|[а-я]|[А-Я]", g):
                 try:
-                    int(g[:-1])
-                    return True
+                    a = int(g[:-1])
+                    if a in range(6, 12):
+                        return True
+                    return False
                 except ValueError:
                     return False
             return False
 
-        if grade != "Teacher" and not correct_grade(grade):
+        if not correct_grade(grade):
             return render_template("p_register.html", msg="Incorrect grade!")
         print(usr, name, pwd, grade)
         try:
