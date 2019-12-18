@@ -26,7 +26,7 @@ def after_request(response):
     return response
 
 
-def decor_restricted(func, users=None):
+def is_restricted(func, users=None):
     if users is None:
         users = ['admin']
 
@@ -98,7 +98,7 @@ def page_home():
 
 
 @app.route('/add_test', methods=["POST"])
-@decor_restricted
+@is_restricted
 def action_admin_add_test():
     if request.method == 'POST':
         with db.atomic():
@@ -107,7 +107,7 @@ def action_admin_add_test():
 
 
 @app.route('/remove_test', methods=["POST"])
-@decor_restricted
+@is_restricted
 def action_admin_rm_test():
     with db.atomic():
         Test.get_by_id(int(request.form['test_id'])).delete_instance(recursive=True)
@@ -115,7 +115,7 @@ def action_admin_rm_test():
 
 
 @app.route('/admin')
-@decor_restricted
+@is_restricted
 def page_admin_tests():
     with db.atomic():
         results = Test.select()
@@ -123,7 +123,7 @@ def page_admin_tests():
 
 
 @app.route('/admin/test/<int:ident>')
-@decor_restricted
+@is_restricted
 def page_admin_edit_test(ident):
     with db.atomic():
         questions = Test.get_by_id(ident).questions

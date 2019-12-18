@@ -34,7 +34,6 @@ class User(BaseModel):
 
 
 class Record(BaseModel):
-    name = TextField()
     score = IntegerField()
     test = ForeignKeyField(Test, backref="done")
     user = ForeignKeyField(User, backref="records")
