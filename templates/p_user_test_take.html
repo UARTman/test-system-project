@@ -7,7 +7,7 @@
                 <li>
                     {{ i.content }} <br>
                     {% for j in i.answers %}
-                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}"> {{ j.content }}  </label>
+                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}" required> {{ j.content }}  </label>
                     {% endfor %}
                 </li>
             {% endfor %}
