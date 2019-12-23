@@ -31,6 +31,10 @@
     color: crimson;
 }
 
+#content > * > form{
+    font-size: 25px;
+}
+
 .right{
     float: right;
 }
