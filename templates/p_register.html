@@ -3,7 +3,7 @@
     {%  if msg %}
         <h3> {{ msg }}</h3>
     {% else %}
-    <form method="post">
+    <form method="post" class="col-6">
         <div class="form-group">
             <label for="userInput"> Username </label>
             <input type="text" class="form-control"  name="user" id="userInput" required>
@@ -20,7 +20,7 @@
             <label for="textInput"> Grade </label>
             <input name="grade" class="form-control" type="text" id="textInput" required>
         </div>
-        <input type="submit" value="Register">
+        <input type="submit" class=" form-control col-3" value="Register">
     </form>
     {% endif %}
 {% endblock %}

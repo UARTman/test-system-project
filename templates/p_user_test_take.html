@@ -5,17 +5,19 @@
             <ul>
             {% for i in model %}
                 <li>
+                    <div class="form-group form-check">
                     {{ i.content }} <br>
                     {% set first=True %}
                     {% for j in i.answers %}
-                        <label><input type="radio" name="q{{ i.number }}" value="{{ j.number }}"
-                                {% if first %} required {% set first=False %} {% endif %}  > {{ j.content }}  </label>
-
+                        <input type="radio" name="q{{ i.number }}" id="q{{ i.number }}_{{ j.number }}" value="{{ j.number }}"
+                                {% if first %} required {% set first=False %} {% endif %}  >
+                        <label for="q{{ i.number }}_{{ j.number }}">{{ j.content }}</label>
                     {% endfor %}
+                    </div>
                 </li>
             {% endfor %}
             </ul>
-            <input type="submit" value="Send">
+            <input type="submit" class="form-control col-1" value="Send">
         </form>
     </div>
 {% endblock %}
