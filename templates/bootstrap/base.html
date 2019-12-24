@@ -17,7 +17,7 @@
 </head>
 <body>
 <nav class="navbar bg-dark navbar-dark navbar-expand-lg">
-    <a class="navbar-brand" href="#"> Main Page </a>
+    <a class="navbar-brand" href="{{ url_for("page_home") }}"> Main Page </a>
     <ul class="navbar-nav mr-auto">
         {% if 'user' in session %}
             {% if session['user'] == 'admin' %}
@@ -26,14 +26,14 @@
         {% endif %}
     </ul>
     {% if 'user' in session %}
-        <span class="navbar-text"> Hello, <b>{{ session['user'] }}</b>! </span>
+        <span class="navbar-text"> Hello, <span class="badge badge-primary">{{ session['user'] }}</span>! </span>
     {% endif %}
     <ul class="navbar-nav">
         {% if 'user' in session %}
             <li class="nav-item"> <a class="nav-link" href="{{ url_for("action_logout") }}"> Logout </a> </li>
         {% else %}
-            <li class="nav-item"> <a class="nav-link"> Login </a> </li>
-            <li class="nav-item"> <a class="nav-link"> Register </a> </li>
+            <li class="nav-item"> <a class="nav-link" role="button" data-toggle="modal" href="#loginModal"> Login </a> </li>
+            <li class="nav-item"> <a class="nav-link" href="{{ url_for("page_register") }}"> Register </a> </li>
         {% endif %}
     </ul>
 </nav>
@@ -49,19 +49,67 @@
             </li>
         </ul>
     </div>
-    <div class="col">
+    <div class="col-8">
         {% block content %}
         {% endblock %}
     </div>
     </div>
+<!-- modals -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="loginModalForm" action="#">
+              <div class="form-group">
+                  <label for="userInput">Username</label>
+                  <input type="text" name="user" id="userInput" class="form-control">
+              </div>
+              <div class="form-group">
+                  <label for="passwordInput">Password</label>
+                  <input type="password" name="password" id="passwordInput" class="form-control">
+              </div>
+              <span class="border rounded border-danger bg-danger" id="loginModalAlert" style="display: none; color: white">Incorrect login/password!</span>
+              <input type="submit" hidden>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="loginModalConfirm">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modals -->
 </div>
 
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="{{ url_for("static", filename="jquery-3.4.1.min.js") }}" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="{{ url_for("static", filename="jquery-3.4.1.min.js") }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        function login() {
+            console.log("Trying to login");
+            $.post("{{url_for("api_login")}}", {"user": $("#userInput").val(), "password": $("#passwordInput").val()}, function (data) {
+                console.log("Success");
+                console.log(data);
+                if (data["success"] === true){
+                    location.reload();
+                }
+            });
+            $("#loginModalAlert").show();
+        }
+        $("#loginModalConfirm").click(login);
+        $("#loginModalForm").submit(login);
+    })
+</script>
 {% block scripts %}
 {% endblock %}
 </body>

@@ -69,7 +69,7 @@ def api_login():
         return jsonify({"success": True})
     except peewee.DoesNotExist:
         pass
-    return jsonify({"success": True})
+    return jsonify({"success": False})
 
 
 @app.route('/register', methods=["POST", "GET"])
@@ -105,12 +105,12 @@ def page_register():
 @app.route("/logout")
 def action_logout():
     session.pop('user', None)
-    return redirect(url_for("page_home"))
+    return redirect(url_for("bs_base"))
 
 
 @app.route('/')
 def page_home():
-    return render_template('p_homepage.html', name="Anton")
+    return render_template('bootstrap/base.html', name="Anton")
 
 
 @app.route('/add_test', methods=["POST"])

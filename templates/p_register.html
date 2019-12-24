@@ -1,26 +1,26 @@
-{% extends "t_base.html" %}
+{% extends "bootstrap/base.html" %}
 {% block content %}
     {%  if msg %}
         <h3> {{ msg }}</h3>
     {% else %}
-    <form class="form-style-1" method="post">
-        <label> Username
-            <input type="text" name="user" required>
-            <br>
-        </label>
-        <label> Real name
-            <input type="text" name="name" required>
-            <br>
-        </label>
-        <label> Password
-            <input type="password" name="password" required>
-            <br>
-        </label>
-        <label> Grade
-            <input name="grade" type="text" required>
-            <br>
-        </label>
-        <input type="submit">
+    <form method="post">
+        <div class="form-group">
+            <label for="userInput"> Username </label>
+            <input type="text" class="form-control"  name="user" id="userInput" required>
+        </div>
+        <div class="form-group">
+            <label for="nameInput"> Real name </label>
+            <input type="text" class="form-control" name="name" id="nameInput" required>
+        </div>
+        <div class="form-group">
+            <label for="passInput"> Password </label>
+            <input type="password" class="form-control" name="password" id="passInput" required>
+        </div>
+        <div class="form-group">
+            <label for="textInput"> Grade </label>
+            <input name="grade" class="form-control" type="text" id="textInput" required>
+        </div>
+        <input type="submit" value="Register">
     </form>
     {% endif %}
 {% endblock %}
