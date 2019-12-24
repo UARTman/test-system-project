@@ -47,7 +47,6 @@ def page_access_denied():
 
 @app.route('/login', methods=["POST"])
 def action_login():
-    print(request.method)
     usr = request.form['user']
     pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
     try:
@@ -60,7 +59,6 @@ def action_login():
 
 @app.route('/api/login', methods=["POST"])
 def api_login():
-    print(request.method)
     usr = request.form['user']
     pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
     try:
@@ -93,7 +91,6 @@ def page_register():
 
         if not correct_grade(grade):
             return render_template("p_register.html", msg="Incorrect grade!")
-        print(usr, name, pwd, grade)
         try:
             User.create(username=usr, name=name, password=pwd, grade=grade)
             return render_template("p_register.html", msg="Registration successful")
@@ -172,7 +169,6 @@ def action_eval_test(ident):
     for i in answers:
         answers[i] = questions.where(Question.number == i)[0].answers \
             .where(Answer.number == answers[i])[0].content
-    print(answers)
     if 'user' in session:
         username = session['user']
     else:
@@ -194,7 +190,6 @@ def action_admin_add_question(ident):
 def action_admin_rm_question(ident):
     test = Test.get_by_id(ident)
     for i in test.questions.select().where(Question.number == int(request.form["number"])):
-        print(i.number)
         Question.get_by_id(i.id).delete_instance(recursive=True)
     Question.update(number=Question.number - 1) \
         .where(Question.number > request.form["number"]) \
@@ -215,7 +210,6 @@ def action_admin_rm_answer(ident):
     answers = question.answers.where(Answer.number == int(request.form["number"]))
     Answer.delete_by_id(answers[0].id)
     for i in answers.where(Answer.number > int(request.form["number"])):
-        print(i.number, int(request.form["number"]))
     Answer.update(number=Answer.number - 1) \
         .where(Answer.number > int(request.form["number"])) \
         .where(Answer.question == question).execute()
