@@ -45,18 +45,6 @@ def page_access_denied():
     return "<h1>Access Denied!</h1> <a href='{0}'> Home </a> ".format(url_for("page_home"))
 
 
-@app.route('/login', methods=["POST"])
-def action_login():
-    usr = request.form['user']
-    pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
-    try:
-        User.get(username=usr, password=pwd)
-        session['user'] = usr
-    except peewee.DoesNotExist:
-        pass
-    return redirect(url_for("page_home"))
-
-
 @app.route('/api/login', methods=["POST"])
 def api_login():
     usr = request.form['user']
