@@ -2,7 +2,7 @@ import os
 from hashlib import md5
 
 import peewee
-from flask import Flask, url_for, request, redirect, session
+from flask import Flask, url_for, request, redirect, session, jsonify
 from flask import render_template
 
 from orm import *
@@ -55,9 +55,21 @@ def action_login():
         session['user'] = usr
     except peewee.DoesNotExist:
         pass
-    finally:
-        pass
     return redirect(url_for("page_home"))
+
+
+@app.route('/api/login', methods=["POST"])
+def api_login():
+    print(request.method)
+    usr = request.form['user']
+    pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
+    try:
+        User.get(username=usr, password=pwd)
+        session['user'] = usr
+        return jsonify({"success": True})
+    except peewee.DoesNotExist:
+        pass
+    return jsonify({"success": True})
 
 
 @app.route('/register', methods=["POST", "GET"])
@@ -223,6 +235,11 @@ def action_admin_set_correct(ident):
 def page_leaderboard():
     model = Record.select()
     return render_template("p_leaderboard.html", model=model, len=len)
+
+
+@app.route("/bs")
+def bs_base():
+    return render_template("bootstrap/base.html")
 
 
 def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
