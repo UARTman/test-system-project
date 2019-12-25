@@ -228,4 +228,4 @@ def base_placeholder():  # TODO: find a way to add template_base to indexing w/o
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
