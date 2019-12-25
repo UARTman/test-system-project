@@ -61,8 +61,8 @@ def api_login():
 @app.route('/register', methods=["POST", "GET"])
 def page_register():
     if request.method == 'POST':
-        usr = request.form['user']
-        name = request.form['name']
+        usr = request.form['user'][:30]
+        name = request.form['name'][:30]
         pwd = md5(bytearray(request.form['password'], encoding='utf-8')).hexdigest()
         grade = request.form['grade']
 
