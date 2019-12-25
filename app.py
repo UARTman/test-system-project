@@ -90,7 +90,7 @@ def page_register():
 @app.route("/logout")
 def action_logout():
     session.pop('user', None)
-    return redirect(url_for("bs_base"))
+    return redirect(url_for("page_home"))
 
 
 @app.route('/')
