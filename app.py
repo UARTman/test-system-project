@@ -218,11 +218,6 @@ def page_leaderboard():
     return render_template("p_leaderboard.html", model=model, len=len)
 
 
-@app.route("/bs")
-def bs_base():
-    return render_template("bootstrap/base.html")
-
-
 def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
     return render_template("t_base.html")
 
