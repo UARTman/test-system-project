@@ -1,5 +1,10 @@
 {% extends "bootstrap/base.html" %}
 {% block content %}
+    {% if "user" in session %}
+    {% if session['user'] == 'admin' %}
+    <button class="btn btn-danger" id="flushButton">Delete all entries</button>
+    {% endif %}
+    {% endif %}
     <table>
         <tr>
             <th> Name </th>
@@ -16,4 +21,13 @@
         </tr>
         {% endfor %}
     </table>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $("#flushButton").click(function () {
+        $.post("{{ url_for("api_admin_flush_leaderboard") }}", function () {
+            location.reload();
+        })
+    })
+    </script>
 {% endblock %}

@@ -212,6 +212,13 @@ def action_admin_set_correct(ident):
     return redirect("/admin/test/{}".format(ident))
 
 
+@app.route("/api/leaderboard/flush", methods=["POST"])
+@is_restricted
+def api_admin_flush_leaderboard():
+    Record.delete().execute()
+    return jsonify({"success": True})
+
+
 @app.route("/leaderboard")
 def page_leaderboard():
     model = Record.select()
