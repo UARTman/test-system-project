@@ -88,7 +88,29 @@
 </div>
 <!-- End login modal -->
 <!-- Confirmation modal -->
-
+<div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="inputModalForm" action="#">
+                    <div class="form-group">
+                        <input type="text" name="user" id="dataInput" class="form-control">
+                    </div>
+                    <input type="submit" hidden>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="inputModalConfirm">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- End confirmation modal -->
 <!-- End modals -->
 </div>
@@ -114,7 +136,17 @@
         }
         $("#loginModalConfirm").click(login);
         $("#loginModalForm").submit(login);
-    })
+
+    });
+    function textDialog(f) {
+            let d = $("#inputModal");
+            function ff () {
+                f($("#dataInput").val())
+            }
+            $("#inputModalForm").submit(ff);
+            $("#inputModalConfirm").click(function () {ff(); $("#inputModal").modal("dispose")});
+            d.modal()
+        }
 </script>
 {% block scripts %}
 {% endblock %}
