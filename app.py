@@ -227,7 +227,7 @@ def page_leaderboard():
 
 @app.route("/admin/users")
 def page_admin_users():
-    return render_template("p_admin_users.html", users=User.select())
+    return render_template("p_admin_users.html", users=User.select().where(User.id > 2))
 
 
 if __name__ == '__main__':
