@@ -225,6 +225,11 @@ def page_leaderboard():
     return render_template("p_leaderboard.html", model=model, len=len)
 
 
+@app.route("/admin/users")
+def page_admin_users():
+    return render_template("p_admin_users.html", users=User.select())
+
+
 def base_placeholder():  # TODO: find a way to add template_base to indexing w/o this clutch.
     return render_template("t_base.html")
 

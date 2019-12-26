@@ -1,0 +1,17 @@
+{% extends "bootstrap/base.html" %}
+{% block content %}
+    <div class="row col-4">
+        <div class="col border "><b>Id</b></div>
+        <div class="col border "><b>Username</b></div>
+        <div class="col border "><b>Real Name</b></div>
+        <div class="col border "><b>Grade</b></div>
+    </div>
+    {% for i in users %}
+    <div class="row col-4">
+        <div class="col border ">{{ i.id }}</div>
+        <div class="col border ">{{ i.username }}</div>
+        <div class="col border ">{{ i.name }}</div>
+        <div class="col border ">{{ i.grade }}</div>
+    </div>
+    {% endfor %}
+{% endblock %}

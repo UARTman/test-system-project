@@ -1,31 +1,34 @@
-{% extends "t_base.html" %}
+{% extends "bootstrap/base.html" %}
 {% block content %}
-    <h2 class="no_margin">Questions</h2>
+    <a href="{{ url_for("page_admin_tests") }}">Back</a>
     <div class="left">
         <ul>
             {% for i in model %}
                 <li>
                     <span class="id"> {{ i.number }} : </span>{{ i.content }}
-                    <span class="remove_question text_button" style="color: red;">[x]</span>
+                    <badge class="badge badge-danger remove_question">[x]</badge>
                     <ul>
                         {% for j in i.answers %}
                             <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
                                 <span class="id"> {{ j.number }} : </span>{{ j.content }}
-                                <span class="remove_answer text_button" style="color: red;">[x]</span>
-                                <span class="correct_answer text_button" style="color: green;">[✔️]</span>
+                                <button class="badge badge-danger remove_answer">[x]</button>
+                                <button class="badge badge-success correct_answer">Set as correct</button>
                             </li>
                         {% endfor %}
-                        <li style="list-style-type: none"><span class="add_answer text_button" style="color: blue">[Add answer]</span></li>
+                        <li style="list-style-type: none"><button class="badge badge-primary add_answer">Add answer</button></li>
                     </ul>
 
                 </li>
             {% endfor %}
-            <li style="list-style-type: none"><span class="text_button" id="add_question" style="color: blue">[Add Question]</span></li>
+            <li style="list-style-type: none"><button class="badge badge-primary" id="add_question">Add Question</button></li>
         </ul>
 
     </div>
 
-    <h4 class="no_margin">Notice: to set answer as correct, click "<span style="color: green">[✔️]</span>" button after it</h4>
+{#    <h4 class="no_margin">Notice: to set answer as correct, click "<span style="color: green">[✔️]</span>" button after it</h4>#}
+
+{% endblock %}
+{%  block scripts %}
     <script>
         $(function () {
             $( ".remove_answer" ).click(function () {
@@ -67,3 +70,4 @@
         })
     </script>
 {% endblock %}
+

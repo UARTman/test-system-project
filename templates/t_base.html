@@ -23,6 +23,7 @@
             <span>You are {{ session['user'] }}</span>
             {% if session['user'] == 'admin' %}
                 <a href="{{ url_for('page_admin_tests') }}">Edit tests</a>
+                <a href="{{ url_for('page_admin_users') }}">Edit users</a>
             {% endif %}
             <a href="{{ url_for('action_logout') }}"> Logout </a>
         {% else %}

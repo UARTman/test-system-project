@@ -1,4 +1,4 @@
-{% extends "t_base.html" %}
+{% extends "bootstrap/base.html" %}
 {% block content %}
     <h2>Tests:</h2>
     <ul>
@@ -6,12 +6,15 @@
             <li>
                 <span class="id" style="display: none">{{ i.id }}</span>
                 <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
-                <span class="remove_button text_button" style="color: red"> [x] </span>
+                <button class="badge badge-danger remove-test"> [x] </button>
             </li>
         {% endfor %}
-        <li style="list-style-type: none"><span class="add_test text_button" style="color: blue">[Add test]</span></li>
+        <li style="list-style-type: none"><button class="badge badge-primary add-test">Add test</button></li>
     </ul>
 
+
+{% endblock %}
+{% block scripts %}
     <script>
         $(function(){
             $( ".remove_button" ).click(function () {
