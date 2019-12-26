@@ -6,10 +6,10 @@
             <li>
                 <span class="id" style="display: none">{{ i.id }}</span>
                 <a href="{{ url_for('page_admin_edit_test', ident=i.id) }}">{{ i.name }}</a>
-                <button class="badge badge-danger remove-test"> [x] </button>
+                <button class="badge badge-danger remove_test"> [x] </button>
             </li>
         {% endfor %}
-        <li style="list-style-type: none"><button class="badge badge-primary add-test">Add test</button></li>
+        <li style="list-style-type: none"><button class="badge badge-primary add_test">Add test</button></li>
     </ul>
 
 
@@ -17,11 +17,11 @@
 {% block scripts %}
     <script>
         $(function(){
-            $( ".remove_button" ).click(function () {
+            $( ".remove_test" ).click(function () {
                 let a = $(this).prev().prev().text();
-                confirmDialog(function () {
+                if (confirm("Do you really want to delete this?")) {
                     $.post("{{ url_for("action_admin_rm_test") }}", {test_id: a}, function() {location.reload()});
-                }).dialog("open");
+                }
             });
             $( ".add_test" ).click(function () {
                 textDialog(function (a) {

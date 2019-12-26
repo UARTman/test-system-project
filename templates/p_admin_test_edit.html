@@ -6,7 +6,7 @@
             {% for i in model %}
                 <li>
                     <span class="id"> {{ i.number }} : </span>{{ i.content }}
-                    <badge class="badge badge-danger remove_question">[x]</badge>
+                    <button class="badge badge-danger remove_question">[x]</button>
                     <ul>
                         {% for j in i.answers %}
                             <li {% if i.correct_answer == j.number %} style="color:green;" {% endif %}>
@@ -17,7 +17,6 @@
                         {% endfor %}
                         <li style="list-style-type: none"><button class="badge badge-primary add_answer">Add answer</button></li>
                     </ul>
-
                 </li>
             {% endfor %}
             <li style="list-style-type: none"><button class="badge badge-primary" id="add_question">Add Question</button></li>
@@ -25,7 +24,6 @@
 
     </div>
 
-{#    <h4 class="no_margin">Notice: to set answer as correct, click "<span style="color: green">[✔️]</span>" button after it</h4>#}
 
 {% endblock %}
 {%  block scripts %}
@@ -36,16 +34,16 @@
                 a = parseInt(a, 10);
                 let b = $(this).parent().parent().parent().text().split(":")[0];
                 b = parseInt(b, 10);
-                confirmDialog(function () {
+                if (confirm("Do you really want to delete this?")) {
                     $.post("{{ url_for("action_admin_rm_answer", ident=id) }}", {question: b, number: a}, function () {location.reload();})
-                }).dialog("open");
+                }
             });
             $( ".remove_question" ).click(function () {
                 let a = $(this).parent().text().split(':')[0];
                 a = parseInt(a);
-                confirmDialog(function () {
+                if (confirm("Do you really want to delete this?")) {
                     $.post("{{ url_for("action_admin_rm_question", ident=id) }}", {number: a}, function () {location.reload();})
-                }).dialog("open");
+                }
             });
             $( ".correct_answer" ).click(function () {
                 let a = $(this).parent().text().split(':')[0];
