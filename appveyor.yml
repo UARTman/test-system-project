@@ -16,7 +16,6 @@ artifacts:
   - path: '*.zip'
 
 deploy:
-  release: test-$(APPVEYOR_REPO_TAG_NAME)
   provider: GitHub
   auth_token:
     secure: aoDGrsLzM0zY8pD8+qIVoe1MeuIrm2aKnZWbZY+t2Y3PgNTMaXleAYsx45V2AOKg
