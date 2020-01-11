@@ -10,6 +10,7 @@ build_script:
 
 after_build:
   - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
+  - ps: ls
 
 
 deploy:
@@ -20,5 +21,5 @@ deploy:
   on:
     branch: master                 # release from master branch only
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
-  artifact: windows-x64-nuitka.zip
+  artifact: *.zip
 
