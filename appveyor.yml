@@ -20,7 +20,6 @@ deploy:
   auth_token:
     secure: aoDGrsLzM0zY8pD8+qIVoe1MeuIrm2aKnZWbZY+t2Y3PgNTMaXleAYsx45V2AOKg
   on:
-    branch: master                 # release from master branch only
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
   artifact: windows-x64-nuitka.zip
 
