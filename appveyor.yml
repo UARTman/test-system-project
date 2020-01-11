@@ -19,3 +19,4 @@ deploy:
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
   artifact:
     - windows-x64-nuitka.zip
+
