@@ -11,5 +11,5 @@ deploy:
   provider: GitHub
   auth_token: 40a793c3d513c78216597a028716023c7e153998
   on:
-    branch: master                 # release from master branch only
-    APPVEYOR_REPO_TAG: true        # deploy on tag push only
+    branch: master # release from master branch only
+    APPVEYOR_REPO_TAG: true # deploy on tag push only
