@@ -6,7 +6,7 @@ install:
   - cmd: C:\Python37\python -m pip install -r requirements.txt
 
 build_script:
-  - cmd: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalon --show-progress --show-scons --experimental=use-pefile wsgi.py
+  - cmd: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalone --experimental=use-pefile wsgi.py
 
 after_build:
   - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
