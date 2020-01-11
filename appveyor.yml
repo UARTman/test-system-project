@@ -15,7 +15,7 @@ after_build:
 deploy:
   provider: GitHub
   auth_token:
-    secure: 83Zm/2bg6mjHmK862aC54oIZJx/G2ZkxY7oYQg5pG9LlQYAx+bS+5QD6vzBqBQjl
+    secure: y67JC/xi8UFlpAsoJIOp/wLmg/Ieo2OEwyZE/10lbvia9nWhHQ/
   on:
     branch: master                 # release from master branch only
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
