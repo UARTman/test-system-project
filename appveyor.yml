@@ -2,7 +2,7 @@ image:
   - Visual Studio 2015
 
 install:
-  - ps: C:\Python37\python -m pip install nuitka
+  - cmd: C:\Python37\python -m pip install nuitka
 
 build_script:
-  - ps: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalone wsgi.py
+  - cmd: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalone wsgi.py
