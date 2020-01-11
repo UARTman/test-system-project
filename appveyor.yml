@@ -8,7 +8,7 @@ build_script:
   - cmd: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalone wsgi.py
 
 after_build:
-  - cmd: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
+  - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
 
 
 deploy:
