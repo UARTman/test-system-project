@@ -6,10 +6,29 @@ install:
   - cmd: C:\Python37\python -m pip install -r requirements.txt
 
 build_script:
-  - cmd: C:\Python37\python -m nuitka --assume-yes-for-downloads --standalone --experimental=use-pefile --include-package=jinja2 --include-package=jinja2.ext --plugin-enable=gevent wsgi.py
+  - cmd: C:\Python37-x64\python -m nuitka --assume-yes-for-downloads --standalone --experimental=use-pefile --include-package=jinja2 --include-package=jinja2.ext --plugin-enable=gevent wsgi.py
+  - ps: cp orm.db wsgi.dist
+  - ps: cp -r static wsgi.dist
+  - ps: cp -r templates wsgi.dist
+  - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
+  - ps: rm -rf wsgi.dist
+  - ps: rm -rf wsgo.build
+  - cmd: C:\Python37-x64\python -m PyInstaller --onefile wsgi.py
+  - ps: cp orm.db dist
+  - ps: cp -r static dist
+  - ps: cp -r templates dist
+  - ps: Compress-Archive -Path dist -DestinationPath windows-x64-pyinstaller.zip
+  - ps: rm -rf dist
+  - ps: rm -rf build
+  - cmd: C:\Python37\python -m PyInstaller --onefile wsgi.py
+  - ps: cp orm.db dist
+  - ps: cp -r static dist
+  - ps: cp -r templates dist
+  - ps: Compress-Archive -Path dist -DestinationPath windows-x86-pyinstaller.zip
+  - ps: rm -rf dist
+  - ps: rm -rf build
 
 after_build:
-  - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
   - ps: ls
 
 artifacts:
@@ -20,6 +39,6 @@ deploy:
   auth_token:
     secure: aoDGrsLzM0zY8pD8+qIVoe1MeuIrm2aKnZWbZY+t2Y3PgNTMaXleAYsx45V2AOKg
   on:
-    APPVEYOR_REPO_TAG: true        # deploy on tag push only
-  artifact: windows-x64-nuitka.zip
+    APPVEYOR_REPO_TAG: true
+  artifact: windows-*.zip
 
