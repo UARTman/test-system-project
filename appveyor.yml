@@ -21,8 +21,6 @@ build_script:
   - ps: Compress-Archive -Path dist -DestinationPath windows-x64-pyinstaller.zip
   - cmd: C:\Python37\python -m PyInstaller --onefile wsgi.py
   - ps: cp orm.db dist
-  - ps: cp -r static dist
-  - ps: cp -r templates dist
   - ps: Compress-Archive -Path dist -DestinationPath windows-x86-pyinstaller.zip
 
 after_build:
