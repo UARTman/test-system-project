@@ -35,5 +35,5 @@ deploy:
     secure: aoDGrsLzM0zY8pD8+qIVoe1MeuIrm2aKnZWbZY+t2Y3PgNTMaXleAYsx45V2AOKg
   on:
     APPVEYOR_REPO_TAG: true
-  artifact: windows-*.zip
+  artifact: '*'
 
