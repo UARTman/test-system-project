@@ -14,22 +14,22 @@ build_script:
   - ps: cp -r static wsgi.dist
   - ps: cp -r templates wsgi.dist
   - ps: Compress-Archive -Path wsgi.dist -DestinationPath windows-x64-nuitka.zip
-  - ps: rm -rf wsgi.dist
-  - ps: rm -rf wsgo.build
+  - ps: rm -r wsgi.dist
+  - ps: rm -r wsgo.build
   - cmd: C:\Python37-x64\python -m PyInstaller --onefile wsgi.py
   - ps: cp orm.db dist
   - ps: cp -r static dist
   - ps: cp -r templates dist
   - ps: Compress-Archive -Path dist -DestinationPath windows-x64-pyinstaller.zip
-  - ps: rm -rf dist
-  - ps: rm -rf build
+  - ps: rm -r dist
+  - ps: rm -r build
   - cmd: C:\Python37\python -m PyInstaller --onefile wsgi.py
   - ps: cp orm.db dist
   - ps: cp -r static dist
   - ps: cp -r templates dist
   - ps: Compress-Archive -Path dist -DestinationPath windows-x86-pyinstaller.zip
-  - ps: rm -rf dist
-  - ps: rm -rf build
+  - ps: rm -r dist
+  - ps: rm -r build
 
 after_build:
   - ps: ls
